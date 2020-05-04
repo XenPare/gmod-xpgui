@@ -1,3 +1,12 @@
+function XPMenu(parentmenu, parent)
+    if not parentmenu then 
+        CloseDermaMenus() 
+    end
+
+    local xpmenu = vgui.Create("XPMenu", parent)
+    return xpmenu
+end
+
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_bBorder", "DrawBorder")
