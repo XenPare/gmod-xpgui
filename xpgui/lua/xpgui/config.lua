@@ -1,6 +1,5 @@
 XPGUI = XPGUI or {}
 
-XPGUI.EternalHidingESC = true
 XPGUI.SoundEnabled = true
 
 --[[
