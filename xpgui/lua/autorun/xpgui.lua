@@ -27,14 +27,21 @@ end
 ]]
 
 if SERVER then
-    local folders = {}
-    for _, f in pairs(file.Find("sound/xpgui/*", "GAME")) do
-        table.insert(folders, f)
-    end
-
-    for _, folder in pairs(folders) do
-        for _, file in pairs(file.Find("sound/xpgui/" .. folder .. "/*", "GAME")) do
-            resource.AddFile(file)
+    local function AddDir(dir)
+        local files, dirs = file.Find(dir .. "/*", "GAME")
+        for _, fdir in pairs(dirs) do
+            if fdir ~= ".svn" then
+                AddDir(dir .. "/" .. fdir)
+            end
+        end
+        
+        for _, f in pairs(files) do
+            resource.AddFile(dir .. "/" .. f)
         end
     end
+     
+    AddDir("sound/xpgui/generic")
+    AddDir("sound/xpgui/lobby")
+    AddDir("sound/xpgui/sidemenu")
+    AddDir("sound/xpgui/submenu")
 end
