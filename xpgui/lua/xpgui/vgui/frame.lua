@@ -1,7 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-    XPGUI.Opened[XPGUI.GetAmount() + 1] = self
+    XPGUI.Add(self)
 
     self.startTime = SysTime()
     self.ExpensiveDrawing = false
@@ -120,13 +120,11 @@ function PANEL:SetBottomButton(title, dock, func)
 end
 
 function PANEL:OnRemove()
-    if XPGUI.GetLast() == self then
-        table.remove(XPGUI.Opened, XPGUI.GetAmount())
-    end
+    table.RemoveByValue(XPGUI.Opened, self)
 end
 
 function PANEL:Close()
-    self:AlphaTo(0, 0.4, 0, function(_,pan) 
+    self:AlphaTo(0, 0.4, 0, function(_, pan) 
         pan:Remove() 
     end)
 end
