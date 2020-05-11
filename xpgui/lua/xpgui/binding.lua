@@ -26,28 +26,18 @@ function XPGUI.PlaySound(path)
     end
 end
 
-local FirstPressed, cache = false
+local FirstPressed
 hook.Add("Think", "XPGUI Binding", function()
-    cache = input.IsButtonDown(KEY_ESCAPE)
-    if not table.IsEmpty(XPGUI.Opened) then
-        if cache and FirstPressed then
-            XPGUI.RemoveLast()
-        end
-
-        FirstPressed = not cache
+    if not FirstPressed and input.IsButtonDown(KEY_ESCAPE) and #XPGUI.Opened > 0 then
+        XPGUI.GetLast():Remove()
+    
+        FirstPressed = true
 
         if gui.IsGameUIVisible() then
             gui.HideGameUI()
             return true 
         end
+    elseif not input.IsButtonDown(KEY_ESCAPE) then
+        FirstPressed = false
     end
 end)
-
-if XPGUI.EternalHidingESC then
-    hook.Add("PreRender", "XPGUI Binding", function()
-        if input.IsKeyDown(KEY_ESCAPE) and gui.IsGameUIVisible() then		
-            gui.HideGameUI()
-            return true 
-        end
-    end)
-end
