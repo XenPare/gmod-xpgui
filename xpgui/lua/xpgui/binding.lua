@@ -1,15 +1,23 @@
 XPGUI.Opened = {}
 
 function XPGUI.GetLast()
-    return XPGUI.Opened[#XPGUI.Opened]
+    return table.GetLastValue(XPGUI.Opened)
 end
 
 function XPGUI.GetFirst()
-    return XPGUI.Opened[1]
+    return table.GetFirstValue(XPGUI.Opened)
 end
 
 function XPGUI.GetAmount()
     return #XPGUI.Opened
+end
+
+function XPGUI.RemoveLast()
+    XPGUI.GetLast():Remove()
+end
+
+function XPGUI.Add(pnl)
+    table.insert(XPGUI.Opened, pnl)
 end
 
 function XPGUI.PlaySound(path)
@@ -23,9 +31,9 @@ hook.Add("Think", "XPGUI Binding", function()
     cache = input.IsButtonDown(KEY_ESCAPE)
     if not table.IsEmpty(XPGUI.Opened) then
         if cache and FirstPressed then
-            XPGUI.GetLast():Remove()
+            XPGUI.RemoveLast()
         end
-    
+
         FirstPressed = not cache
 
         if gui.IsGameUIVisible() then
