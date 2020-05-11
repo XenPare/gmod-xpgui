@@ -100,7 +100,7 @@ function PANEL:SetTitle(text)
 end
 
 function PANEL:SetBottomButton(title, dock, func)
-    if not self.BottomDockExisted then
+    if not IsValid(self.BottomDock) then
         self.BottomDock = vgui.Create("EditablePanel", self)
         self.BottomDock:Dock(BOTTOM)
         self.BottomDock:SetTall(47)
@@ -115,8 +115,6 @@ function PANEL:SetBottomButton(title, dock, func)
     self.Button.DoClick = function(self)
         func(self)
     end
-
-    self.BottomDockExisted = true
 
     return self.Button
 end
