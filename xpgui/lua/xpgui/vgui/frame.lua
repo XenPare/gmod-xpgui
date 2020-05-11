@@ -106,17 +106,17 @@ function PANEL:SetBottomButton(title, dock, func)
         self.BottomDock:SetTall(47)
     end
 
-    self.Button = vgui.Create("XPButton", self.BottomDock)
-    self.Button:SetText(title)
-    self.Button:Dock(dock)
-    self.Button:DockMargin(6, 6, 6, 6)
-    self.Button:SizeToContents()
+    local Button = vgui.Create("XPButton", self.BottomDock)
+    Button:SetText(title)
+    Button:Dock(dock)
+    Button:DockMargin(6, 6, 6, 6)
+    Button:SizeToContents()
 
-    self.Button.DoClick = function(self)
+    Button.DoClick = function(self)
         func(self)
     end
 
-    return self.Button
+    return Button
 end
 
 function PANEL:OnRemove()
