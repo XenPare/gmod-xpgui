@@ -27,7 +27,7 @@ function XPGUI.PlaySound(path)
 end
 
 local FirstPressed
-hook.Add("Think", "XPGUI Binding", function()
+hook.Add("PreRender", "XPGUI Binding", function()
     if not FirstPressed and input.IsButtonDown(KEY_ESCAPE) and #XPGUI.Opened > 0 then
         XPGUI.GetLast():Remove()
     
