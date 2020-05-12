@@ -123,10 +123,15 @@ function PANEL:OnRemove()
     table.RemoveByValue(XPGUI.Opened, self)
 end
 
+function PANEL:OnClose()
+    -- Use it instead of OnRemove
+end
+
 function PANEL:Close()
     self:AlphaTo(0, 0.4, 0, function(_, pan) 
         pan:Remove() 
     end)
+    self:OnClose()
 end
 
 derma.DefineControl("XPFrame", "", PANEL, "EditablePanel")
