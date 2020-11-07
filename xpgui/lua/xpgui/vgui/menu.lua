@@ -200,7 +200,7 @@ function PANEL:PerformLayout()
 
     derma.SkinHook("Layout", "Menu", self)
 
-    DScrollPanel.PerformLayout(self)
+    self.BaseClass.PerformLayout(self)
 end
 
 function PANEL:Open(x, y, skipanimation, ownerpanel)
