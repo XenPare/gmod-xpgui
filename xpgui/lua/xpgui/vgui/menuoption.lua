@@ -17,7 +17,7 @@ end
 function PANEL:SetSubMenu(menu)
 	self.SubMenu = menu
 
-	if (!IsValid(self.SubMenuArrow)) then
+	if not IsValid(self.SubMenuArrow) then
 		self.SubMenuArrow = vgui.Create("DPanel", self)
 		self.SubMenuArrow.Paint = function(panel, w, h) 
 			derma.SkinHook("Paint", "MenuRightArrow", panel, w, h) 
@@ -61,7 +61,6 @@ function PANEL:Paint(w, h)
 	end
 
 	pos_x, pos_y = self:GetPos()
-
 	if pos_y == self:GetParent():GetTall() - h then
 		draw.RoundedBoxEx(6, 0, 0, w, h, self.Color, false, false, true, true)
 	elseif pos_y == 0 then
@@ -79,24 +78,24 @@ end
 function PANEL:OnMouseReleased(mousecode)
 	DButton.OnMouseReleased(self, mousecode)
 
-	if (self.m_MenuClicking && mousecode == MOUSE_LEFT) then
+	if self.m_MenuClicking && mousecode == MOUSE_LEFT then
 		self.m_MenuClicking = false
 		CloseDermaMenus()
 	end
 end
 
 function PANEL:DoRightClick()
-	if (self:GetIsCheckable()) then
+	if self:GetIsCheckable() then
 		self:ToggleCheck()
 	end
 end
 
 function PANEL:DoClickInternal()
-	if (self:GetIsCheckable()) then
+	if self:GetIsCheckable() then
 		self:ToggleCheck()
 	end
 
-	if (self.m_pMenu) then
+	if self.m_pMenu then
 		self.m_pMenu:OptionSelectedInternal(self)
 	end
 end
@@ -118,12 +117,10 @@ function PANEL:PerformLayout()
 
 	self:SetSize(w, 22)
 
-	if (IsValid(self.SubMenuArrow)) then
-
+	if IsValid(self.SubMenuArrow) then
 		self.SubMenuArrow:SetSize(15, 15)
 		self.SubMenuArrow:CenterVertical()
 		self.SubMenuArrow:AlignRight(4)
-
 	end
 
 	DButton.PerformLayout(self)

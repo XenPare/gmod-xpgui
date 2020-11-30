@@ -9,8 +9,6 @@ AccessorFunc(PANEL, "m_iDataHeight", "DataHeight")
 AccessorFunc(PANEL, "m_bMultiSelect", "MultiSelect")
 AccessorFunc(PANEL, "m_bHideHeaders", "HideHeaders")
 
---Derma_Hook(PANEL, "Paint", "Paint", "ListView")
-
 function PANEL:Init()
 	self:SetSortable(true)
 	self:SetMouseInputEnabled(true)
@@ -34,7 +32,6 @@ function PANEL:Init()
 	self.pnlCanvas = vgui.Create("EditablePanel", self.pnlCanvasCanvas)
 
 	self.VBar = vgui.Create("XPScrollBar", self)
-	--self.VBar:SetZPos(20)
 end
 
 function PANEL:Paint(w, h)
@@ -45,7 +42,6 @@ function PANEL:DisableScrollbar()
 	if IsValid(self.VBar) then
 		self.VBar:Remove()
 	end
-
 	self.VBar = nil
 end
 
@@ -106,7 +102,6 @@ function PANEL:ColumnWidth(i)
 	if not ctrl then 
 		return 0 
 	end
-
 	return ctrl:GetWide()
 end
 
@@ -130,7 +125,6 @@ function PANEL:FixColumnsLayout()
 		Remainder = Remainder + (TargetWidth - Column:SetWidth(TargetWidth))
 	end
 
-	-- If there's a remainder, try to palm it off on the other panels, equally
 	local TotalMaxWidth = 0
 	while (Remainder ~= 0) do
 		local PerPanel = math.floor(Remainder / NumColumns)
@@ -147,7 +141,6 @@ function PANEL:FixColumnsLayout()
 			TotalMaxWidth = TotalMaxWidth + Column:GetMaxWidth()
 		end
 
-		-- Total max width of all the columns is less than the width of the DListView, abort!
 		if TotalMaxWidth < self.pnlCanvas:GetWide() then 
 			break 
 		end
@@ -155,7 +148,6 @@ function PANEL:FixColumnsLayout()
 		Remainder = math.Approach(Remainder, 0, 1)
 	end
 
-	-- Set the positions of the resized columns
 	local x = 0
 	for k, Column in pairs(self.Columns) do
 		Column.x = x
@@ -169,7 +161,6 @@ end
 function PANEL:PerformLayout()
 	self.pnlCanvasCanvas:SetSize(self:GetWide() - 19, self:GetTall() - self:GetHeaderHeight())
 
-	-- Do Scrollbar
 	local Wide = self:GetWide()
 	local YPos = 0
 
@@ -179,7 +170,7 @@ function PANEL:PerformLayout()
 		self.VBar:SetUp(self.VBar:GetTall() - self:GetHeaderHeight(), self.pnlCanvas:GetTall())
 		YPos = self.VBar:GetOffset()
 
-		if (self.VBar.Enabled) then 
+		if self.VBar.Enabled then 
 			Wide = Wide - 19 
 		end
 	end
@@ -256,7 +247,7 @@ function PANEL:AddLine(...)
 
 	Line:SetListView(self)
 	Line:SetID(ID)
-	
+
 	for k, v in pairs(self.Columns) do
 		Line:SetColumnText(k, "")
 	end
@@ -278,7 +269,6 @@ function PANEL:OnMouseWheeled(dlta)
 	if (!IsValid(self.VBar)) then 
 		return 
 	end
-
 	return self.VBar:OnMouseWheeled(dlta)
 end
 
@@ -302,31 +292,30 @@ end
 
 function PANEL:GetSortedID(line)
 	for k, v in pairs(self.Sorted) do
-		if (v:GetID() == line) then return k end
+		if v:GetID() == line then 
+			return k 
+		end
 	end
 end
 
 function PANEL:OnClickLine(Line, bClear)
 	local bMultiSelect = self:GetMultiSelect()
-	if (!bMultiSelect && !bClear) then 
+	if not bMultiSelect && not bClear then 
 		return 
 	end
-
 
 	if (bMultiSelect && input.IsKeyDown(KEY_LCONTROL)) then
 		bClear = false
 	end
 
 	if (bMultiSelect && input.IsKeyDown(KEY_LSHIFT)) then
-
 		local Selected = self:GetSortedID(self:GetSelectedLine())
-		if (Selected) then
+		if Selected then
 			local LineID = self:GetSortedID(Line:GetID())
 
 			local First = math.min(Selected, LineID)
 			local Last = math.max(Selected, LineID)
 
-			-- Fire off OnRowSelected for each non selected row
 			for id = First, Last do
 				local line = self.Sorted[id]
 				if (!line:IsLineSelected()) then 
@@ -335,8 +324,7 @@ function PANEL:OnClickLine(Line, bClear)
 				line:SetSelected(true)
 			end
 
-			-- Clear the selection and select only the required rows
-			if (bClear) then 
+			if bClear then 
 				self:ClearSelection() 
 			end
 
@@ -349,19 +337,19 @@ function PANEL:OnClickLine(Line, bClear)
 		end
 	end
 
-	if (Line:IsSelected() && Line.m_fClickTime && (!bMultiSelect || bClear)) then
+	if Line:IsSelected() && Line.m_fClickTime && (!bMultiSelect || bClear) then
 		local fTimeDistance = SysTime() - Line.m_fClickTime
-		if (fTimeDistance < 0.3) then
+		if fTimeDistance < 0.3 then
 			self:DoDoubleClick(Line:GetID(), Line)
 			return
 		end
 	end
 
-	if (!bMultiSelect || bClear) then
+	if not bMultiSelect || bClear then
 		self:ClearSelection()
 	end
 
-	if (Line:IsSelected()) then 
+	if Line:IsSelected() then 
 		return 
 	end
 
@@ -375,37 +363,37 @@ function PANEL:SortByColumns(c1, d1, c2, d2, c3, d3, c4, d4)
 	table.Copy(self.Sorted, self.Lines)
 
 	table.sort(self.Sorted, function(a, b)
-		if (!IsValid(a)) then
+		if not IsValid(a) then
 			return true 
 		end
 
-		if (!IsValid(b)) then
+		if not IsValid(b) then
 			return false
 		end
 
-		if (c1 && a:GetColumnText(c1) != b:GetColumnText(c1)) then
-			if (d1) then 
+		if c1 && a:GetColumnText(c1) ~= b:GetColumnText(c1) then
+			if d1 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c1) < b:GetColumnText(c1)
 		end
 
-		if (c2 && a:GetColumnText(c2) != b:GetColumnText(c2)) then
-			if (d2) then 
+		if c2 && a:GetColumnText(c2) ~= b:GetColumnText(c2) then
+			if d2 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c2) < b:GetColumnText(c2)
 		end
 
-		if (c3 && a:GetColumnText(c3) != b:GetColumnText(c3)) then
-			if (d3) then 
+		if c3 && a:GetColumnText(c3) ~= b:GetColumnText(c3) then
+			if d3 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c3) < b:GetColumnText(c3)
 		end
 
-		if (c4 && a:GetColumnText(c4) != b:GetColumnText(c4)) then
-			if (d4) then 
+		if c4 && a:GetColumnText(c4) ~= b:GetColumnText(c4) then
+			if d4 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c4) < b:GetColumnText(c4)
@@ -437,7 +425,7 @@ function PANEL:SortByColumn(ColumnID, Desc)
 end
 
 function PANEL:SelectItem(Item)
-	if (!Item) then 
+	if not Item then 
 		return 
 	end
 
@@ -463,7 +451,7 @@ function PANEL:OnRowRightClick(LineID, Line)
 end
 
 function PANEL:Clear()
-	for k, v in pairs(self.Lines) do
+	for _, v in pairs(self.Lines) do
 		v:Remove()
 	end
 
@@ -475,13 +463,11 @@ end
 
 function PANEL:GetSelected()
 	local ret = {}
-
-	for k, v in pairs(self.Lines) do
+	for _, v in pairs(self.Lines) do
 		if v:IsLineSelected() then
 			table.insert(ret, v)
 		end
 	end
-
 	return ret
 end
 

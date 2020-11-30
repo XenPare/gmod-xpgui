@@ -1,8 +1,8 @@
 
 local PANEL = {}
 
-AccessorFunc(PANEL, "m_iOverlap",			"Overlap")
-AccessorFunc(PANEL, "m_bShowDropTargets",	"ShowDropTargets", FORCE_BOOL)
+AccessorFunc(PANEL, "m_iOverlap", "Overlap")
+AccessorFunc(PANEL, "m_bShowDropTargets", "ShowDropTargets", FORCE_BOOL)
 
 function PANEL:Init()
 	self.Panels = {}
@@ -15,23 +15,25 @@ function PANEL:Init()
 	self.pnlCanvas.OnModified = function() self:OnDragModified() end
 
 	self.pnlCanvas.UpdateDropTarget = function(Canvas, drop, pnl)
-		if (!self:GetShowDropTargets()) then return end
-		DDragBase.UpdateDropTarget(Canvas, drop, pnl)
+		if not self:GetShowDropTargets() then 
+			return 
+		end
+		self.BaseClass.UpdateDropTarget(Canvas, drop, pnl)
 	end
 
 	self.pnlCanvas.OnChildAdded = function(Canvas, child)
-
 		local dn = Canvas:GetDnD()
-		if (dn) then
-
+		if dn then
 			child:Droppable(dn)
 			child.OnDrop = function()
-
 				local x, y = Canvas:LocalCursorPos()
 				local closest, id = self.pnlCanvas:GetClosestChild(x, Canvas:GetTall() / 2), 0
 
 				for k, v in pairs(self.Panels) do
-					if (v == closest) then id = k break end
+					if (v == closest) then 
+						id = k 
+						break 
+					end
 				end
 
 				table.RemoveByValue(self.Panels, child)
@@ -40,22 +42,18 @@ function PANEL:Init()
 				self:InvalidateLayout()
 
 				return child
-
 			end
 		end
-
 	end
 
 	self:SetOverlap(-4)
 
 	self.btnLeft = vgui.Create("XPButton", self)
---	self.btnLeft:SetText("<")
 	self.btnLeft.PaintOver = function(panel, w, h)
 		draw.SimpleText("<", "xpgui_big", w * 0.5, h * 0.5 - 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	self.btnRight = vgui.Create("XPButton", self)
---	self.btnRight:SetText(">")
 	self.btnRight.PaintOver = function(panel, w, h)
 		draw.SimpleText(">", "xpgui_big", w * 0.5, h * 0.5 - 2, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
@@ -106,13 +104,10 @@ end
 function PANEL:OnMouseWheeled(dlta)
 	self.OffsetX = self.OffsetX + dlta * -30
 	self:InvalidateLayout(true)
-
 	return true
 end
 
 function PANEL:Think()
-	-- Hmm.. This needs to really just be done in one place
-	-- and made available to everyone.
 	local FrameRate = VGUIFrameTime() - self.FrameTime
 	self.FrameTime = VGUIFrameTime()
 
@@ -127,17 +122,13 @@ function PANEL:Think()
 	end
 
 	if (dragndrop.IsDragging()) then
-
 		local x, y = self:LocalCursorPos()
-
 		if (x < 30) then
 			self.OffsetX = self.OffsetX - (350 * FrameRate)
 		elseif (x > self:GetWide() - 30) then
 			self.OffsetX = self.OffsetX + (350 * FrameRate)
 		end
-
 		self:InvalidateLayout(true)
-
 	end
 end
 
@@ -147,17 +138,19 @@ function PANEL:PerformLayout()
 	self.pnlCanvas:SetTall(h - 24)
 
 	local x = 0
-
 	for k, v in pairs(self.Panels) do
-		if (!IsValid(v)) then continue end
-		if (!v:IsVisible()) then continue end
+		if not IsValid(v) or not v:IsVisible() then 
+			continue 
+		end
 
 		v:SetPos(x, 0)
 		v:SetTall(h - 24)
-		if (v.ApplySchemeSettings) then v:ApplySchemeSettings() end
+
+		if (v.ApplySchemeSettings) then 
+			v:ApplySchemeSettings() 
+		end
 
 		x = x + v:GetWide() - self.m_iOverlap
-
 	end
 
 	self.pnlCanvas:SetWide(x + self.m_iOverlap)

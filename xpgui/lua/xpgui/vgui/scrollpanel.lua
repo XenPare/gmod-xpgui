@@ -92,7 +92,7 @@ function PANEL:PerformLayout()
 	self.VBar:SetUp(self:GetTall(), self.pnlCanvas:GetTall())
 	YPos = self.VBar:GetOffset()
 
-	if (self.VBar.Enabled) then 
+	if self.VBar.Enabled then 
 		Wide = Wide - self.VBar:GetWide() 
 	end
 
@@ -101,7 +101,7 @@ function PANEL:PerformLayout()
 
 	self:Rebuild()
 
-	if (Tall ~= self.pnlCanvas:GetTall()) then
+	if Tall ~= self.pnlCanvas:GetTall() then
 		self.VBar:SetScroll(self.VBar:GetScroll()) -- Make sure we are not too far down!
 	end
 end

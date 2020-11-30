@@ -1,10 +1,10 @@
 function XPMenu(parentmenu, parent)
-    if not parentmenu then 
-        CloseDermaMenus() 
-    end
+	if not parentmenu then 
+		CloseDermaMenus() 
+	end
 
-    local xpmenu = vgui.Create("XPMenu", parent)
-    return xpmenu
+	local xpmenu = vgui.Create("XPMenu", parent)
+	return xpmenu
 end
 
 local PANEL = {}
@@ -17,255 +17,254 @@ AccessorFunc(PANEL, "m_iMaxHeight", "MaxHeight")
 AccessorFunc(PANEL, "m_pOpenSubMenu", "OpenSubMenu")
 
 function PANEL:Init()
-    self.startTime = SysTime()
+	self.startTime = SysTime()
 
-    self.RealTall = 0
+	self.RealTall = 0
 
-    self:SetIsMenu(true)
-    self:SetDrawBorder(true)
-    self:SetPaintBackground(true)
-    self:SetMinimumWidth(100)
-    self:SetDrawOnTop(true)
-    self:SetMaxHeight(ScrH() / 1.2)
-    self:SetDeleteSelf(true)
+	self:SetIsMenu(true)
+	self:SetDrawBorder(true)
+	self:SetPaintBackground(true)
+	self:SetMinimumWidth(100)
+	self:SetDrawOnTop(true)
+	self:SetMaxHeight(ScrH() / 1.2)
+	self:SetDeleteSelf(true)
 
-    local x, y = input.GetCursorPos()
-    self:SetPos(x, y)
+	local x, y = input.GetCursorPos()
+	self:SetPos(x, y)
 
-    self:MakePopup()
-    self:SetPadding(0)
+	self:MakePopup()
+	self:SetPadding(0)
 
-    RegisterDermaMenuForClose(self)
+	RegisterDermaMenuForClose(self)
 end
 
 function PANEL:AddPanel(pnl)
-    self:AddItem(pnl)
-    pnl.ParentMenu = self
+	self:AddItem(pnl)
+	pnl.ParentMenu = self
 end
 
 function PANEL:AddOption(strText, funcFunction)
-    local pnl = vgui.Create("XPMenuOption", self)
-    pnl:SetMenu(self)
+	local pnl = vgui.Create("XPMenuOption", self)
+	pnl:SetMenu(self)
 
-    pnl:SetText(strText)
-    pnl:SetTextColor(color_white)
-    pnl:SetFont("xpgui_medium")
-    pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
+	pnl:SetText(strText)
+	pnl:SetTextColor(color_white)
+	pnl:SetFont("xpgui_medium")
+	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-    if (funcFunction) then
-        pnl.DoClick = funcFunction
-    end
+	if (funcFunction) then
+		pnl.DoClick = funcFunction
+	end
 
-    self.RealTall = self.RealTall + 24
+	self.RealTall = self.RealTall + 24
 
-    local mx, my = input.GetCursorPos()
-    self:SetPos(mx, math.Clamp(my - self.RealTall + 24, 0, ScrH()))
+	local mx, my = input.GetCursorPos()
+	self:SetPos(mx, math.Clamp(my - self.RealTall + 24, 0, ScrH()))
 
-    self:AddPanel(pnl)
+	self:AddPanel(pnl)
 
-    return pnl
+	return pnl
 end
 
 function PANEL:AddCVar(strText, convar, on, off, funcFunction)
-    local pnl = vgui.Create("DMenuOptionCVar", self)
-    pnl:SetMenu(self)
+	local pnl = vgui.Create("DMenuOptionCVar", self)
+	pnl:SetMenu(self)
 
-    pnl:SetText(strText)
-    pnl:SetTextColor(color_white)
-    pnl:SetFont("xpgui_medium")
-    pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
+	pnl:SetText(strText)
+	pnl:SetTextColor(color_white)
+	pnl:SetFont("xpgui_medium")
+	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-    if (funcFunction) then
-        pnl.DoClick = funcFunction
-    end
+	if (funcFunction) then
+		pnl.DoClick = funcFunction
+	end
 
-    pnl:SetConVar(convar)
-    pnl:SetValueOn(on)
-    pnl:SetValueOff(off)
+	pnl:SetConVar(convar)
+	pnl:SetValueOn(on)
+	pnl:SetValueOff(off)
 
-    self:AddPanel(pnl)
+	self:AddPanel(pnl)
 
-    return pnl
+	return pnl
 end
 
 function PANEL:AddSpacer(strText, funcFunction)
-    local pnl = vgui.Create("DPanel", self)
+	local pnl = vgui.Create("DPanel", self)
 
-    pnl.Paint = function(p, w, h)
-        return
-    end
+	pnl.Paint = function(p, w, h)
+		return
+	end
 
-    pnl:SetTall(10)
-    self:AddPanel(pnl)
+	pnl:SetTall(10)
+	self:AddPanel(pnl)
 
-    return pnl
+	return pnl
 end
 
 function PANEL:AddSubMenu(strText, funcFunction)
-    local pnl = vgui.Create("XPMenuOption", self)
-    local SubMenu = pnl:AddSubMenu(strText, funcFunction)
+	local pnl = vgui.Create("XPMenuOption", self)
+	local SubMenu = pnl:AddSubMenu(strText, funcFunction)
 
-    pnl:SetText(strText)
-    pnl:SetTextColor(color_white)
-    pnl:SetFont("xpgui_medium")
-    pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
+	pnl:SetText(strText)
+	pnl:SetTextColor(color_white)
+	pnl:SetFont("xpgui_medium")
+	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-    if (funcFunction) then
-        pnl.DoClick = funcFunction
-    end
+	if (funcFunction) then
+		pnl.DoClick = funcFunction
+	end
 
-    self:AddPanel(pnl)
+	self:AddPanel(pnl)
 
-    return SubMenu, pnl
+	return SubMenu, pnl
 end
 
 function PANEL:Hide()
-    local openmenu = self:GetOpenSubMenu()
+	local openmenu = self:GetOpenSubMenu()
 
-    if (openmenu) then
-        openmenu:Hide()
-    end
+	if (openmenu) then
+		openmenu:Hide()
+	end
 
-    self:SetVisible(false)
-    self:SetOpenSubMenu(nil)
+	self:SetVisible(false)
+	self:SetOpenSubMenu(nil)
 end
 
 function PANEL:OpenSubMenu(item, menu)
-    local openmenu = self:GetOpenSubMenu()
+	local openmenu = self:GetOpenSubMenu()
 
-    if (IsValid(openmenu) && openmenu:IsVisible()) then
-        if (menu && openmenu == menu) then
-            return
-        end
+	if (IsValid(openmenu) && openmenu:IsVisible()) then
+		if (menu && openmenu == menu) then
+			return
+		end
 
-        self:CloseSubMenu(openmenu)
-    end
+		self:CloseSubMenu(openmenu)
+	end
 
-    if (!IsValid(menu)) then
-        return
-    end
+	if (!IsValid(menu)) then
+		return
+	end
 
-    local x, y = item:LocalToScreen(self:GetWide(), 0)
-    menu:Open(x - 3, y, false, item)
+	local x, y = item:LocalToScreen(self:GetWide(), 0)
+	menu:Open(x - 3, y, false, item)
 
-    self:SetOpenSubMenu(menu)
+	self:SetOpenSubMenu(menu)
 end
 
 function PANEL:CloseSubMenu(menu)
-    menu:Hide()
-    self:SetOpenSubMenu(nil)
+	menu:Hide()
+	self:SetOpenSubMenu(nil)
 end
 
 function PANEL:Paint(w, h)
-    if (!self:GetPaintBackground()) then
-        return
-    end
+	if not self:GetPaintBackground() then
+		return
+	end
 
-    draw.BlurredRect(0, 0, w, h, 6, nil, self:GetPos())
-    --surface.DrawPanelBlur(self, 6)
+	draw.BlurredRect(0, 0, w, h, 6, nil, self:GetPos())
 
-    return true
+	return true
 end
 
 function PANEL:ChildCount()
-    return #self:GetCanvas():GetChildren()
+	return #self:GetCanvas():GetChildren()
 end
 
 function PANEL:GetChild(num)
-    return self:GetCanvas():GetChildren()[num]
+	return self:GetCanvas():GetChildren()[num]
 end
 
 function PANEL:PerformLayout()
-    local w = self:GetMinimumWidth()
+	local w = self:GetMinimumWidth()
 
-    for k, pnl in pairs(self:GetCanvas():GetChildren()) do
-        pnl:PerformLayout()
-        w = math.max(w, pnl:GetWide())
-    end
+	for k, pnl in pairs(self:GetCanvas():GetChildren()) do
+		pnl:PerformLayout()
+		w = math.max(w, pnl:GetWide())
+	end
 
-    self:SetWide(w)
+	self:SetWide(w)
 
-    local y = 0
-    for k, pnl in pairs(self:GetCanvas():GetChildren()) do
-        pnl:SetWide(w)
-        pnl:SetPos(0, y)
-        pnl:InvalidateLayout(true)
+	local y = 0
+	for k, pnl in pairs(self:GetCanvas():GetChildren()) do
+		pnl:SetWide(w)
+		pnl:SetPos(0, y)
+		pnl:InvalidateLayout(true)
 
-        y = y + pnl:GetTall() + 1
-    end
+		y = y + pnl:GetTall() + 1
+	end
 
-    y = math.min(y, self:GetMaxHeight())
+	y = math.min(y, self:GetMaxHeight())
 
-    self:SetTall(y)
+	self:SetTall(y)
 
-    derma.SkinHook("Layout", "Menu", self)
+	derma.SkinHook("Layout", "Menu", self)
 
-    self.BaseClass.PerformLayout(self)
+	self.BaseClass.PerformLayout(self)
 end
 
 function PANEL:Open(x, y, skipanimation, ownerpanel)
-    RegisterDermaMenuForClose(self)
+	RegisterDermaMenuForClose(self)
 
-    local maunal = x && y
+	local maunal = x && y
 
-    x = x or gui.MouseX()
-    y = y or gui.MouseY()
+	x = x or gui.MouseX()
+	y = y or gui.MouseY()
 
-    local OwnerHeight = 0
-    local OwnerWidth = 0
-    if ownerpanel then
-        OwnerWidth, OwnerHeight = ownerpanel:GetSize()
-    end
+	local OwnerHeight = 0
+	local OwnerWidth = 0
+	if ownerpanel then
+		OwnerWidth, OwnerHeight = ownerpanel:GetSize()
+	end
 
-    self:PerformLayout()
+	self:PerformLayout()
 
-    local w = self:GetWide()
-    local h = self:GetTall()
+	local w = self:GetWide()
+	local h = self:GetTall()
 
-    self:SetSize(w, h)
+	self:SetSize(w, h)
 
-    if (y + h > ScrH()) then 
-        y = ((maunal && ScrH()) or (y + OwnerHeight)) - h 
-    end
+	if y + h > ScrH() then 
+		y = ((maunal && ScrH()) or (y + OwnerHeight)) - h 
+	end
 
-    if (x + w > ScrW()) then 
-        x = ((maunal && ScrW()) or x) - w 
-    end
+	if x + w > ScrW() then 
+		x = ((maunal && ScrW()) or x) - w 
+	end
 
-    if (y < 1) then 
-        y = 1 
-    end
+	if y < 1 then 
+		y = 1 
+	end
 
-    if (x < 1) then 
-        x = 1 
-    end
+	if x < 1 then 
+		x = 1 
+	end
 
-    self:SetPos(x, y)
-    self:MakePopup()
-    self:SetVisible(true)
-    self:SetKeyboardInputEnabled(false)
+	self:SetPos(x, y)
+	self:MakePopup()
+	self:SetVisible(true)
+	self:SetKeyboardInputEnabled(false)
 end
 
 function PANEL:OptionSelectedInternal(option)
-    self:OptionSelected(option, option:GetText())
+	self:OptionSelected(option, option:GetText())
 end
 
 function PANEL:OptionSelected(option, text)
-    -- For override
+	-- For override
 end
 
 function PANEL:ClearHighlights()
-    for k, pnl in pairs(self:GetCanvas():GetChildren()) do
-        pnl.Highlight = nil
-    end
+	for _, pnl in pairs(self:GetCanvas():GetChildren()) do
+		pnl.Highlight = nil
+	end
 end
 
 function PANEL:HighlightItem(item)
-    for k, pnl in pairs(self:GetCanvas():GetChildren()) do
-        if (pnl == item) then
-            pnl.Highlight = true
-        end
-    end
+	for _, pnl in pairs(self:GetCanvas():GetChildren()) do
+		if (pnl == item) then
+			pnl.Highlight = true
+		end
+	end
 end
 
 derma.DefineControl("XPMenu", "", PANEL, "XPScrollPanel")

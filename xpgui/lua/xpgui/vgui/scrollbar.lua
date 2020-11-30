@@ -87,7 +87,7 @@ function PANEL:AddScroll(dlta)
 end
 
 function PANEL:SetScroll(scrll)
-	if (!self.Enabled) then 
+	if not self.Enabled then 
 		self.Scroll = 0 
 		return 
 	end
@@ -117,14 +117,14 @@ function PANEL:AnimateTo(scrll, length, delay, ease)
 end
 
 function PANEL:GetScroll()
-	if (!self.Enabled) then 
+	if not self.Enabled then 
 		self.Scroll = 0 
 	end
 	return self.Scroll
 end
 
 function PANEL:GetOffset()
-	if (!self.Enabled) then 
+	if not self.Enabled then 
 		return 0 
 	end
 	return self.Scroll * -1
@@ -150,12 +150,11 @@ function PANEL:OnMouseReleased()
 end
 
 function PANEL:OnCursorMoved(x, y)
-
-	if (!self.Enabled) then 
+	if not self.Enabled then 
 		return 
 	end
 
-	if (!self.Dragging) then 
+	if not self.Dragging then 
 		return 
 	end
 
@@ -173,11 +172,11 @@ function PANEL:OnCursorMoved(x, y)
 end
 
 function PANEL:Grip()
-	if (!self.Enabled) then 
+	if not self.Enabled then 
 		return 
 	end
 
-	if (self.BarSize == 0) then
+	if self.BarSize == 0 then
 		return 
 	end
 

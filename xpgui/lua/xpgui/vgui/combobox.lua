@@ -4,105 +4,104 @@ local tex_corner8 = surface.GetTextureID("gui/corner8")
 local CT, FT
 
 local function drawLine(x,y,w)
-    surface.DrawLine(x, y - 1, x + w, y - 1)
-    surface.DrawLine(x - 1, y, x + w + 1, y)
-    surface.DrawLine(x, y + 1, x + w, y + 1)
+	surface.DrawLine(x, y - 1, x + w, y - 1)
+	surface.DrawLine(x - 1, y, x + w + 1, y)
+	surface.DrawLine(x, y + 1, x + w, y + 1)
 end
 
 function PANEL:Init()
-    if self.DropButton then 
-        self.DropButton:Remove() 
-    end
+	if self.DropButton then 
+		self.DropButton:Remove() 
+	end
 
-    CT = SysTime()
-    self.OpenAnimStartTime = SysTime()
-    self.OpenBarScale = 0
-    self.OpenBarColor = XPGUI.ComboBoxOpenBarColor
+	CT = SysTime()
+	self.OpenAnimStartTime = SysTime()
+	self.OpenBarScale = 0
+	self.OpenBarColor = XPGUI.ComboBoxOpenBarColor
 
-    self.DropButton = vgui.Create("DPanel", self)
+	self.DropButton = vgui.Create("DPanel", self)
 
-    self:SetTall(21)
+	self:SetTall(21)
 
-    self.DropButton.Paint = function(panel, w, h)
-        CT = SysTime()
+	self.DropButton.Paint = function(panel, w, h)
+		CT = SysTime()
 
-        if self:IsMenuOpen() then
-            if self.OpenAnimStartTime > 0 and CT > self.OpenAnimStartTime + 0.2 then
-                self.OpenAnimStartTime = -1
-            end
+		if self:IsMenuOpen() then
+			if self.OpenAnimStartTime > 0 and CT > self.OpenAnimStartTime + 0.2 then
+				self.OpenAnimStartTime = -1
+			end
 
-            if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 then
-                self.OpenBarScale = 6 / 0.2 * (CT - self.OpenAnimStartTime)
-            end
+			if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 then
+				self.OpenBarScale = 6 / 0.2 * (CT - self.OpenAnimStartTime)
+			end
 
-            self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarOpenedColor)
-        else
-            if self.OpenAnimStartTime < 0 and !self:GetSelectedID() then
-                self.OpenAnimStartTime = CT
-            end
+			self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarOpenedColor)
+		else
+			if self.OpenAnimStartTime < 0 and !self:GetSelectedID() then
+				self.OpenAnimStartTime = CT
+			end
 
-            if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 and !self:GetSelectedID() then
-                self.OpenBarScale = 6 - 6 / 0.2 * (CT - self.OpenAnimStartTime)
-            end
+			if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 and !self:GetSelectedID() then
+				self.OpenBarScale = 6 - 6 / 0.2 * (CT - self.OpenAnimStartTime)
+			end
 
-            self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarColor)
-        end
+			self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarColor)
+		end
 
-        surface.SetDrawColor(self.OpenBarColor)
+		surface.SetDrawColor(self.OpenBarColor)
 
-        drawLine(4, h * 0.5, 12)
-        if self.OpenBarScale > 0 then
-            drawLine(4, h * 0.5 - self.OpenBarScale, 12)
-            drawLine(4, h * 0.5 + self.OpenBarScale, 12)
-        end
+		drawLine(4, h * 0.5, 12)
+		if self.OpenBarScale > 0 then
+			drawLine(4, h * 0.5 - self.OpenBarScale, 12)
+			drawLine(4, h * 0.5 + self.OpenBarScale, 12)
+		end
 
-    end
+	end
 
-    self.DropButton:SetMouseInputEnabled(false)
-    self.DropButton.ComboBox = self
-    
-    self.FGColor = XPGUI.BGColor
-    self.FGColor = Color(255 - self.FGColor.r, 255 - self.FGColor.g, 255 - self.FGColor.b, 25)
-    self.FGLineColor = XPGUI.ComboBoxFGLineColor
+	self.DropButton:SetMouseInputEnabled(false)
+	self.DropButton.ComboBox = self
+
+	self.FGColor = XPGUI.BGColor
+	self.FGColor = Color(255 - self.FGColor.r, 255 - self.FGColor.g, 255 - self.FGColor.b, 25)
+	self.FGLineColor = XPGUI.ComboBoxFGLineColor
 
 
-    self:SetFont("xpgui_tiny")
-    self:SetTextColor(color_white)
+	self:SetFont("xpgui_tiny")
+	self:SetTextColor(color_white)
 
-    self:SetTooltipPanelOverride("XPTooltip")
+	self:SetTooltipPanelOverride("XPTooltip")
 end
 
 function PANEL:PerformLayout()
-    self.DropButton:SetSize(self:GetTall(), self:GetTall())
+	self.DropButton:SetSize(self:GetTall(), self:GetTall())
 	self.DropButton:AlignRight(0)
 	self.DropButton:CenterVertical()
 end
 
 function PANEL:DoClickInternal()
-    if not self:GetSelectedID() then
-        self.OpenAnimStartTime = CT
-    end
+	if not self:GetSelectedID() then
+		self.OpenAnimStartTime = CT
+	end
 end
 
 function PANEL:Paint(w, h)
-    if self:IsHovered() or self:IsMenuOpen() then
-        self.FGColor.a = Lerp(0.075, self.FGColor.a, 35)
-        self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 100)
-    else
-        self.FGColor.a = Lerp(0.075, self.FGColor.a, 25)
-        self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 10)
-    end
+	if self:IsHovered() or self:IsMenuOpen() then
+		self.FGColor.a = Lerp(0.075, self.FGColor.a, 35)
+		self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 100)
+	else
+		self.FGColor.a = Lerp(0.075, self.FGColor.a, 25)
+		self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 10)
+	end
 
-    if self:IsDown() then
-        self.FGColor.a = Lerp(0.075,self.FGColor.a, 75)
-    end
+	if self:IsDown() then
+		self.FGColor.a = Lerp(0.075,self.FGColor.a, 75)
+	end
 
-    draw.RoundedBox(6, 0, 0, w, h, self.FGColor) -- bg
-    --draw.RoundedBox(4, 2, 2, w-4, h-4, self.FGColor)
-    
-    draw.NoTexture()
-    surface.SetDrawColor(self.FGLineColor)
-    surface.DrawLine(self.DropButton:GetPos() - 1, 0, self.DropButton:GetPos() - 1, h)
+	draw.RoundedBox(6, 0, 0, w, h, self.FGColor) -- bg
+
+	draw.NoTexture()
+	surface.SetDrawColor(self.FGLineColor)
+	surface.DrawLine(self.DropButton:GetPos() - 1, 0, self.DropButton:GetPos() - 1, h)
 end
 
 function PANEL:OpenMenu(pControlOpener)
@@ -110,36 +109,36 @@ function PANEL:OpenMenu(pControlOpener)
 		return
 	end
 
-    if #self.Choices == 0 then 
-        return 
-    end
+	if #self.Choices == 0 then 
+		return 
+	end
 
 	if (IsValid(self.Menu)) then
 		self.Menu:Remove()
 		self.Menu = nil
 	end
 
-	self.Menu = vgui.Create("XPMenu", self) --DermaMenu(false, self)
+	self.Menu = vgui.Create("XPMenu", self)
 
 	if (self:GetSortItems()) then
 		local sorted = {}
 		for k, v in pairs(self.Choices) do
 			local val = tostring(v)
-            if (string.len(val) > 1 && not tonumber(val) && val:StartWith("#")) then 
-                val = language.GetPhrase(val:sub(2)) 
-            end
+			if (string.len(val) > 1 && not tonumber(val) && val:StartWith("#")) then 
+				val = language.GetPhrase(val:sub(2)) 
+			end
 
 			table.insert(sorted, { 
-                id = k, 
-                data = v, 
-                label = val 
-            })
-        end
-        
+				id = k, 
+				data = v, 
+				label = val 
+			})
+		end
+		
 		for k, v in SortedPairsByMemberValue(sorted, "label") do
-            local option = self.Menu:AddOption(v.data, function() 
-                self:ChooseOption(v.data, v.id) 
-            end)
+			local option = self.Menu:AddOption(v.data, function() 
+				self:ChooseOption(v.data, v.id) 
+			end)
 
 			if self.ChoiceIcons[v.id] then
 				option:SetIcon(self.ChoiceIcons[v.id])
@@ -147,9 +146,9 @@ function PANEL:OpenMenu(pControlOpener)
 		end
 	else
 		for k, v in pairs(self.Choices) do
-            local option = self.Menu:AddOption(v, function() 
-                self:ChooseOption(v, k) 
-            end)
+			local option = self.Menu:AddOption(v, function() 
+				self:ChooseOption(v, k) 
+			end)
 
 			if self.ChoiceIcons[k] then
 				option:SetIcon(self.ChoiceIcons[k])
@@ -163,11 +162,11 @@ function PANEL:OpenMenu(pControlOpener)
 end
 
 function PANEL:OnCursorEntered(val)
-    surface.PlaySound("xpgui/submenu/submenu_dropdown_rollover_01.wav")
+	surface.PlaySound("xpgui/submenu/submenu_dropdown_rollover_01.wav")
 end
 
 function PANEL:OnDepressed()
-    surface.PlaySound("xpgui/sidemenu/sidemenu_click_01.wav")
+	surface.PlaySound("xpgui/sidemenu/sidemenu_click_01.wav")
 end
 
 vgui.Register("XPComboBox", PANEL, "DComboBox")

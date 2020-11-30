@@ -6,7 +6,7 @@ function PANEL:Init()
 end
 
 function PANEL:UpdateColours(skin)
-	if (self:GetParent():IsLineSelected()) then 
+	if self:GetParent():IsLineSelected() then 
 		return self:SetTextStyleColor(skin.Colours.Label.Bright) 
 	end
 
@@ -75,7 +75,6 @@ function PANEL:OnMousePressed(mcode)
 	if (mcode == MOUSE_RIGHT) then
 		-- This is probably the expected behaviour..
 		if (!self:IsLineSelected()) then
-
 			self:GetListView():OnClickLine(self, true)
 			self:OnSelect()
 		end
@@ -124,7 +123,6 @@ function PANEL:SetColumnText(i, strText)
 		self.Columns[i] = vgui.Create("XPListViewLabel", self)
 		self.Columns[i].IsHovered = self.IsHovered
 		self.Columns[i]:SetMouseInputEnabled(false)
-
 	end
 
 	self.Columns[i]:SetText(tostring(strText))
@@ -141,7 +139,6 @@ function PANEL:GetColumnText(i)
 
 	return self.Columns[i].Value
 end
-
 PANEL.GetValue = PANEL.GetColumnText
 
 function PANEL:SetSortValue(i, data)
