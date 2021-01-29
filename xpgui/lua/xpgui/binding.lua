@@ -13,7 +13,7 @@ function XPGUI.GetAmount()
 end
 
 function XPGUI.RemoveLast()
-	XPGUI.GetLast():Remove()
+	XPGUI.GetLast():Close()
 end
 
 function XPGUI.Add(pnl)
@@ -29,7 +29,7 @@ end
 local FirstPressed
 hook.Add("PreRender", "XPGUI Binding", function()
 	if not FirstPressed and input.IsButtonDown(KEY_ESCAPE) and #XPGUI.Opened > 0 then
-		XPGUI.GetLast():Remove()
+		XPGUI.RemoveLast()
 
 		FirstPressed = true
 
