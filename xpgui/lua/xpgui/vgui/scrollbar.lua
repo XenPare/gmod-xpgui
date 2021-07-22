@@ -11,6 +11,8 @@ function PANEL:Init()
 
 	self.BackgroundOpacity = 0
 
+	self.LastThink = 0
+
 	self.btnGrip = vgui.Create("XPScrollBarGrip", self)
 
 	self:SetSize(16, 15)
@@ -72,8 +74,11 @@ function PANEL:OnMouseWheeled(dlta)
 end
 
 function PANEL:Think()
+	local now = CurTime()
+	local timepassed = now - self.LastThink
+	self.LastThink = now
 	if not self.Dragging then
-		self:SetScroll(Lerp(0.05, self:GetScroll(), self.NextScroll))
+		self:SetScroll(math.Approach(self:GetScroll(), self.NextScroll, 700 * timepassed))
 	end
 end
 
@@ -131,7 +136,7 @@ function PANEL:GetOffset()
 end
 
 function PANEL:Paint(w, h)
-	self.BackgroundOpacity = Lerp(0.05, self.BackgroundOpacity, self.Dragging and 180 or 0)
+	self.BackgroundOpacity = Lerp(5 * FrameTime(), self.BackgroundOpacity, self.Dragging and 180 or 0)
 
 	draw.RoundedBox(self.btnGrip.BarScale, w - self.btnGrip.BarScale, 0, self.btnGrip.BarScale, h, ColorAlpha(XPGUI.ScrollBarBGColor, self.BackgroundOpacity))
 	return true

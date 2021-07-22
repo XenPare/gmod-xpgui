@@ -4,7 +4,6 @@ function PANEL:Init()
 	XPGUI.Add(self)
 
 	self.startTime = SysTime()
-	self.ExpensiveDrawing = false
 
 	self:SetSize(ScrW() / 2, ScrH() / 2)
 	self:Center()
@@ -29,59 +28,69 @@ function PANEL:Init()
 		self:Close()
 	end
 
-	self.TopDock.OnCursorEntered = function()
-		self.Hovered = true
+	self.TopDock.OnCursorEntered = function(dock)
+		dock.Hovered = true
 	end
 
-	self.TopDock.OnCursorExited = function()
-		self.Hovered = false
+	self.TopDock.OnCursorExited = function(dock)
+		dock.Hovered = false
 	end
 
-	self.TopDock.CloseGradientAlpha = 0
+	self.TopDock.CloseGradientAlpha = XPGUI.CloseHoverColor.a
+	self.TopDockColor = XPGUI.CloseHoverColor
 
-	local color = XPGUI.CloseColor
-	local gradtex = surface.GetTextureID("gui/gradient_down")
-
-	self.TopDock.Paint = function(self, w, h)
-		if self.Hovered then
-			color = XPGUI.CloseHoverColor
-			self.CloseGradientAlpha = Lerp(0.05, self.CloseGradientAlpha, 255)
+	self.TopDock.SlideAnim = EasyAnim.NewAnimation(0.5, EASE_OutExpo)
+	self.TopDock.SlideAnim.Value = -self.TopDock:GetTall()
+	self.TopDock.SlideAnim.SetAnimPrinciple = function(animObject)
+		if self.TopDock:IsHovered() then
+			animObject:SetDuration(0.5)
+			animObject:SetEasing(EASE_OutExpo)
 		else
-			color = XPGUI.CloseColor
-			self.CloseGradientAlpha = Lerp(0.05, self.CloseGradientAlpha, 0)
+			animObject:SetDuration(0.75)
+			animObject:SetEasing(EASE_InExpo)
+		end
+	end
+	self.TopDock.Think = function(dock)
+		if dock:IsHovered() then
+			self.TopDockColor = XPGUI.CloseHoverColor
+			dock.SlideAnim:AnimTo(0)
+		else
+			self.TopDockColor = XPGUI.CloseColor
+			dock.SlideAnim:AnimTo(-dock:GetTall())
 		end
 
-		if self:IsDown() then
-			color = XPGUI.ClosePressColor
+		if dock:IsDown() then
+			self.TopDockColor = XPGUI.ClosePressColor
 		end
-
-		surface.SetDrawColor(XPGUI.HeaderLineColor)
-		surface.DrawLine(8, h - 1, w - 8, h - 1)
-		surface.DrawLine(8, h, w - 8, h)
-		surface.SetTexture(gradtex)
-		surface.SetDrawColor(ColorAlpha(color, self.CloseGradientAlpha))
-		surface.TrueRoundedRectEx(6, 0, 0, w, h, true, true, false, false, w, h)
 	end
 end
 
-function PANEL:DrawExpended(bool)
-	self.ExpensiveDrawing = bool == true and true or false
-end
-
-function PANEL:SetNoRounded(bool)
-	self.Rounded = bool and bool or false
-end
+local gradtex = surface.GetTextureID("gui/gradient_down")
 
 function PANEL:Paint(w, h)
 	if self.BGBlur then
 		Derma_DrawBackgroundBlur(self, self.startTime)
-	end
-
-	if self.ExpensiveDrawing then
-		draw.DrawPanelRoundedRectBlur(self, 0, 0, w, h, XPGUI.BGColor) -- Very expensive drawing
+		draw.RoundedBox(6, 0, 0, w, h, Color(0, 0, 0, 200))
 	else
-		surface.DrawPanelBlur(self, 8)
-		draw.RoundedBox(self.Rounded and 6 or 0, 0, 0, w, h, XPGUI.BGColor)
+		if !self.FirstInit then -- We need to pre-cache shape for better performance
+			self.FirstInit = true
+			self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
+		end
+		
+		EZMASK.DrawWithMask(function() 
+			surface.SetDrawColor(color_white)
+			surface.DrawPoly(self.PolyMask)
+		end, function() 
+			surface.DrawPanelBlur(self, 6)
+			draw.RoundedBox(6, 0, 0, w, h, Color(0, 0, 0, 200))
+
+			surface.SetDrawColor(XPGUI.HeaderLineColor)
+			surface.DrawLine(8, self.TopDock:GetTall() - 1, w - 8, self.TopDock:GetTall() - 1)
+			surface.DrawLine(8, self.TopDock:GetTall(), w - 8, self.TopDock:GetTall())
+			surface.SetTexture(gradtex)
+			surface.SetDrawColor(ColorAlpha(self.TopDockColor, XPGUI.CloseHoverColor.a * math.abs(self.TopDock.SlideAnim:GetValue() + self.TopDock:GetTall()) / self.TopDock:GetTall()))
+			surface.DrawTexturedRect(0, self.TopDock.SlideAnim:GetValue(), w, self.TopDock:GetTall())
+		end)
 	end
 end
 

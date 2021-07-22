@@ -161,7 +161,18 @@ function PANEL:Paint(w, h)
 		return
 	end
 
-	draw.BlurredRect(0, 0, w, h, 6, nil, self:GetPos())
+	if !self.FirstInit then -- We need to pre-cache shape for better performance
+		self.FirstInit = true
+		self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
+	end
+
+	EZMASK.DrawWithMask(function() 
+		surface.SetDrawColor(color_white)
+		surface.DrawPoly(self.PolyMask)
+	end, function() 
+		surface.DrawPanelBlur(self, 6)
+	end)
+	draw.RoundedBox(6, 0, 0, w, h-1, XPGUI.BGColor)
 
 	return true
 end

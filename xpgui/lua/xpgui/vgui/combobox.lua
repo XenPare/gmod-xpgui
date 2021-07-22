@@ -35,7 +35,7 @@ function PANEL:Init()
 				self.OpenBarScale = 6 / 0.2 * (CT - self.OpenAnimStartTime)
 			end
 
-			self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarOpenedColor)
+			self.OpenBarColor = LerpColor(2.5 * FrameTime(), self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarOpenedColor)
 		else
 			if self.OpenAnimStartTime < 0 and !self:GetSelectedID() then
 				self.OpenAnimStartTime = CT
@@ -45,7 +45,7 @@ function PANEL:Init()
 				self.OpenBarScale = 6 - 6 / 0.2 * (CT - self.OpenAnimStartTime)
 			end
 
-			self.OpenBarColor = LerpColor(0.025, self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarColor)
+			self.OpenBarColor = LerpColor(2.5 * FrameTime(), self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarColor)
 		end
 
 		surface.SetDrawColor(self.OpenBarColor)
@@ -86,15 +86,15 @@ end
 
 function PANEL:Paint(w, h)
 	if self:IsHovered() or self:IsMenuOpen() then
-		self.FGColor.a = Lerp(0.075, self.FGColor.a, 35)
-		self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 100)
+		self.FGColor.a = Lerp(7.5 * FrameTime(), self.FGColor.a, 35)
+		self.FGLineColor.a = Lerp(7.5 * FrameTime(), self.FGLineColor.a, 100)
 	else
-		self.FGColor.a = Lerp(0.075, self.FGColor.a, 25)
-		self.FGLineColor.a = Lerp(0.075, self.FGLineColor.a, 10)
+		self.FGColor.a = Lerp(7.5 * FrameTime(), self.FGColor.a, 25)
+		self.FGLineColor.a = Lerp(7.5 * FrameTime(), self.FGLineColor.a, 10)
 	end
 
 	if self:IsDown() then
-		self.FGColor.a = Lerp(0.075,self.FGColor.a, 75)
+		self.FGColor.a = Lerp(7.5 * FrameTime(),self.FGColor.a, 75)
 	end
 
 	draw.RoundedBox(6, 0, 0, w, h, self.FGColor) -- bg

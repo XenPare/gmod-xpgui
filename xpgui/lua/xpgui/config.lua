@@ -7,7 +7,7 @@ XPGUI.SoundEnabled = true
 ]]
 
 XPGUI.BGColor = Color(10, 10, 10, 200)
-XPGUI.CloseHoverColor = Color(238, 62, 97, 155)
+XPGUI.CloseHoverColor = Color(238, 62, 97, 220)
 XPGUI.ClosePressColor = Color(208, 52, 77, 155)
 XPGUI.CloseColor = Color(123, 123, 123, 160)
 XPGUI.HeaderLineColor = Color(200, 200, 200, 120)

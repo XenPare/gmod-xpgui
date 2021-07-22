@@ -55,10 +55,10 @@ end
 
 function PANEL:Paint(w,h)
 	if self:IsHovered() then
-		self.Color = LerpColor(0.1, self.Color, self:IsLineSelected() and XPGUI.ListViewLineSelectedHoverColor or XPGUI.ListViewLineHoverColor)
+		self.Color = LerpColor(10 * FrameTime(), self.Color, self:IsLineSelected() and XPGUI.ListViewLineSelectedHoverColor or XPGUI.ListViewLineHoverColor)
 		draw.RoundedBox(4, 0, 0, w, h, self.Color)
 	elseif self:IsLineSelected() then
-		self.Color = LerpColor(0.1, self.Color, XPGUI.ListViewLineSelectedColor)
+		self.Color = LerpColor(10 * FrameTime(), self.Color, XPGUI.ListViewLineSelectedColor)
 		draw.NoRoundedBox(0, 0, w, h, self.Color)
 	end
 end

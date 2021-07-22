@@ -59,13 +59,13 @@ function PANEL:Init()
 	self.Header.Paint = function(pan, w, h)
 		id = self:GetColumnID()
 		if pan:IsHovered() then
-			pan.Color.a = Lerp(0.075, pan.Color.a, 35)
+			pan.Color.a = Lerp(7.5 * FrameTime(), pan.Color.a, 35)
 		else
-			pan.Color.a = Lerp(0.075, pan.Color.a, 25)
+			pan.Color.a = Lerp(7.5 * FrameTime(), pan.Color.a, 25)
 		end
 	
 		if pan:IsDown() then
-			pan.Color.a = Lerp(0.075, pan.Color.a, 75)
+			pan.Color.a = Lerp(7.5 * FrameTime(), pan.Color.a, 75)
 		end
 
 		draw.RoundedBoxEx(6, 0, 0, w - (id < #self:GetParent().Columns and 1 or 0), h, pan.Color, not (id > 1), !(id < #self:GetParent().Columns), false, false)

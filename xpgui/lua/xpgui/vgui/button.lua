@@ -32,13 +32,13 @@ end
 
 function PANEL:Paint(w, h)
 	if self:IsHovered() then
-		self.Color.a = Lerp(0.075, self.Color.a , 35)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 35)
 	else
-		self.Color.a = Lerp(0.075, self.Color.a , 25)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 25)
 	end
 
 	if self:IsDown() then
-		self.Color.a = Lerp(0.075, self.Color.a , 75)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 75)
 	end
 
 	draw.RoundedBox(6, 0, 0, w, h, self.Color)

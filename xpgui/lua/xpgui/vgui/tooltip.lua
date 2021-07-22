@@ -74,7 +74,19 @@ end
 
 function PANEL:Paint(w, h)
 	self:PositionTooltip()
-	draw.DrawPanelRoundedRectBlur(self, 0, 0, w, h, XPGUI.BGColor)
+	
+	if !self.FirstInit then -- We need to pre-cache shape for better performance
+		self.FirstInit = true
+		self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
+	end
+
+	EZMASK.DrawWithMask(function() 
+		surface.SetDrawColor(color_white)
+		surface.DrawPoly(self.PolyMask)
+	end, function() 
+		surface.DrawPanelBlur(self, 6)
+	end)
+	draw.RoundedBox(6, 0, 0, w, h, XPGUI.BGColor)
 end
 
 function PANEL:OpenForPanel(panel)

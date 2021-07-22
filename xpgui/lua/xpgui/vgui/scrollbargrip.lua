@@ -11,15 +11,15 @@ end
 
 function PANEL:Think()
 	if self:IsHovered() or self:GetParent().Dragging then
-		self.BarScale = Lerp(0.1, self.BarScale, self:GetWide())
+		self.BarScale = Lerp(10 * FrameTime(), self.BarScale, self:GetWide())
 	else
-		self.BarScale = Lerp(0.1, self.BarScale, 6)
+		self.BarScale = Lerp(10 * FrameTime(), self.BarScale, 6)
 	end
 
 	if self:GetParent().Dragging then
-		self.Color.a = Lerp(0.1, self.Color.a, 255)
+		self.Color.a = Lerp(10 * FrameTime(), self.Color.a, 255)
 	else
-		self.Color.a = Lerp(0.1, self.Color.a, XPGUI.ScrollBarGripColor.a)
+		self.Color.a = Lerp(10 * FrameTime(), self.Color.a, XPGUI.ScrollBarGripColor.a)
 	end
 end
 

@@ -16,9 +16,9 @@ end
 
 function PANEL:IndicatorLayout()
 	if self:HasFocus() then
-		self.IndicatorColor = LerpColor(0.05, self.IndicatorColor, XPGUI.TextEntryIndicatorFocusedColor)
+		self.IndicatorColor = LerpColor(5 * FrameTime(), self.IndicatorColor, XPGUI.TextEntryIndicatorFocusedColor)
 	else
-		self.IndicatorColor = LerpColor(0.05, self.IndicatorColor, XPGUI.TextEntryIndicatorColor)
+		self.IndicatorColor = LerpColor(5 * FrameTime(), self.IndicatorColor, XPGUI.TextEntryIndicatorColor)
 	end
 end
 
