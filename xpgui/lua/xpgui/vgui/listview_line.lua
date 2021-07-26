@@ -27,9 +27,9 @@ end
 
 derma.DefineControl("XPListViewLabel", "", PANEL, "DLabel")
 
---[[---------------------------------------------------------
-	DListView_Line
------------------------------------------------------------]]
+--[[
+	Line
+]]
 
 local PANEL = {}
 
@@ -72,9 +72,8 @@ function PANEL:OnRightClick()
 end
 
 function PANEL:OnMousePressed(mcode)
-	if (mcode == MOUSE_RIGHT) then
-		-- This is probably the expected behaviour..
-		if (!self:IsLineSelected()) then
+	if mcode == MOUSE_RIGHT then
+		if not self:IsLineSelected() then
 			self:GetListView():OnClickLine(self, true)
 			self:OnSelect()
 		end
@@ -89,7 +88,7 @@ function PANEL:OnMousePressed(mcode)
 end
 
 function PANEL:OnCursorMoved()
-	if (input.IsMouseDown(MOUSE_LEFT)) then
+	if input.IsMouseDown(MOUSE_LEFT) then
 		self:GetListView():OnClickLine(self)
 	end
 end
@@ -108,8 +107,8 @@ function PANEL:IsLineSelected()
 end
 
 function PANEL:SetColumnText(i, strText)
-	if (type(strText) == "Panel") then
-		if (IsValid(self.Columns[i])) then 
+	if type(strText) == "Panel" then
+		if IsValid(self.Columns[i]) then 
 			self.Columns[i]:Remove() 
 		end
 
@@ -119,7 +118,7 @@ function PANEL:SetColumnText(i, strText)
 		return
 	end
 
-	if (!IsValid(self.Columns[i])) then
+	if not IsValid(self.Columns[i]) then
 		self.Columns[i] = vgui.Create("XPListViewLabel", self)
 		self.Columns[i].IsHovered = self.IsHovered
 		self.Columns[i]:SetMouseInputEnabled(false)
@@ -133,10 +132,9 @@ end
 PANEL.SetValue = PANEL.SetColumnText
 
 function PANEL:GetColumnText(i)
-	if (!self.Columns[i]) then 
+	if not self.Columns[i] then 
 		return "" 
 	end
-
 	return self.Columns[i].Value
 end
 PANEL.GetValue = PANEL.GetColumnText

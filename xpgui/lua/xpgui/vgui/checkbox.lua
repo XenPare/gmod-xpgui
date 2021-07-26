@@ -21,9 +21,9 @@ end
 function PANEL:Paint(w, h)
 	local FT = FrameTime()
 	if self:IsHovered() then
-		self.Color.a = Lerp(FT * 7.5, self.Color.a , 35)
+		self.Color.a = Lerp(FT * 7.5, self.Color.a, 35)
 	else
-		self.Color.a = Lerp(FT * 7.5, self.Color.a , 25)
+		self.Color.a = Lerp(FT * 7.5, self.Color.a, 25)
 	end
 
 	if self:IsDown() then
@@ -31,7 +31,7 @@ function PANEL:Paint(w, h)
 			self.CheckedColorAlpha = Lerp(FT * 5, self.CheckedColorAlpha, 100)
 		else
 			self.CheckedColorAlpha = Lerp(FT * 5, self.CheckedColorAlpha, 100)
-			self.CheckSize = self.CheckAnim:AnimTo(w*0.5)
+			self.CheckSize = self.CheckAnim:AnimTo(w * 0.5)
 		end
 		self.Color.a = Lerp(FT * 7.5, self.Color.a , 75)
 	else
@@ -88,7 +88,6 @@ function PANEL:Init()
 			if self:GetDisabled() then
 				return
 			end
-		
 			XPGUI.PlaySound("xpgui/submenu/submenu_dropdown_rollover_01.wav")
 		end
 	end
@@ -101,7 +100,7 @@ function PANEL:OnChange(val)
 end
 
 function PANEL:PerformLayout()
-	local x = self.m_iIndent || 0
+	local x = self.m_iIndent or 0
 
 	self.Button:SetSize(16, 16)
 	self.Button:SetPos(x, math.floor((self:GetTall() - self.Button:GetTall() ) / 2))

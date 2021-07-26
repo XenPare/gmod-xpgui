@@ -121,8 +121,7 @@ end
 
 function PANEL:Hide()
 	local openmenu = self:GetOpenSubMenu()
-
-	if (openmenu) then
+	if openmenu then
 		openmenu:Hide()
 	end
 
@@ -133,15 +132,14 @@ end
 function PANEL:OpenSubMenu(item, menu)
 	local openmenu = self:GetOpenSubMenu()
 
-	if (IsValid(openmenu) && openmenu:IsVisible()) then
-		if (menu && openmenu == menu) then
+	if IsValid(openmenu) and openmenu:IsVisible() then
+		if menu and openmenu == menu then
 			return
 		end
-
 		self:CloseSubMenu(openmenu)
 	end
 
-	if (!IsValid(menu)) then
+	if not IsValid(menu) then
 		return
 	end
 
@@ -161,7 +159,7 @@ function PANEL:Paint(w, h)
 		return
 	end
 
-	if !self.FirstInit then -- We need to pre-cache shape for better performance
+	if not self.FirstInit then -- We need to pre-cache shape for better performance
 		self.FirstInit = true
 		self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
 	end
@@ -172,7 +170,7 @@ function PANEL:Paint(w, h)
 	end, function() 
 		surface.DrawPanelBlur(self, 6)
 	end)
-	draw.RoundedBox(6, 0, 0, w, h-1, XPGUI.BGColor)
+	draw.RoundedBox(6, 0, 0, w, h - 1, XPGUI.BGColor)
 
 	return true
 end
@@ -187,8 +185,7 @@ end
 
 function PANEL:PerformLayout()
 	local w = self:GetMinimumWidth()
-
-	for k, pnl in pairs(self:GetCanvas():GetChildren()) do
+	for _, pnl in pairs(self:GetCanvas():GetChildren()) do
 		pnl:PerformLayout()
 		w = math.max(w, pnl:GetWide())
 	end
@@ -196,7 +193,7 @@ function PANEL:PerformLayout()
 	self:SetWide(w)
 
 	local y = 0
-	for k, pnl in pairs(self:GetCanvas():GetChildren()) do
+	for _, pnl in pairs(self:GetCanvas():GetChildren()) do
 		pnl:SetWide(w)
 		pnl:SetPos(0, y)
 		pnl:InvalidateLayout(true)
@@ -216,7 +213,7 @@ end
 function PANEL:Open(x, y, skipanimation, ownerpanel)
 	RegisterDermaMenuForClose(self)
 
-	local maunal = x && y
+	local maunal = x and y
 
 	x = x or gui.MouseX()
 	y = y or gui.MouseY()
@@ -235,11 +232,11 @@ function PANEL:Open(x, y, skipanimation, ownerpanel)
 	self:SetSize(w, h)
 
 	if y + h > ScrH() then 
-		y = ((maunal && ScrH()) or (y + OwnerHeight)) - h 
+		y = ((maunal and ScrH()) or (y + OwnerHeight)) - h 
 	end
 
 	if x + w > ScrW() then 
-		x = ((maunal && ScrW()) or x) - w 
+		x = ((maunal and ScrW()) or x) - w 
 	end
 
 	if y < 1 then 
@@ -272,7 +269,7 @@ end
 
 function PANEL:HighlightItem(item)
 	for _, pnl in pairs(self:GetCanvas():GetChildren()) do
-		if (pnl == item) then
+		if pnl == item then
 			pnl.Highlight = true
 		end
 	end

@@ -10,9 +10,9 @@ end
 
 derma.DefineControl("DListViewHeaderLabel", "", PANEL, "DLabel")
 
---[[---------------------------------------------------------
-	DListView_DraggerBar
------------------------------------------------------------]]
+--[[
+	DraggerBar
+]]
 
 local PANEL = {}
 
@@ -33,9 +33,9 @@ end
 
 derma.DefineControl("DListView_DraggerBar", "", PANEL, "DButton")
 
---[[---------------------------------------------------------
-	DListView_Column
------------------------------------------------------------]]
+--[[
+	Column
+]]
 
 local PANEL = {}
 
@@ -68,12 +68,18 @@ function PANEL:Init()
 			pan.Color.a = Lerp(7.5 * FrameTime(), pan.Color.a, 75)
 		end
 
-		draw.RoundedBoxEx(6, 0, 0, w - (id < #self:GetParent().Columns and 1 or 0), h, pan.Color, not (id > 1), !(id < #self:GetParent().Columns), false, false)
+		draw.RoundedBoxEx(6, 0, 0, w - (id < #self:GetParent().Columns and 1 or 0), h, pan.Color, not (id > 1), not (id < #self:GetParent().Columns), false, false)
 	end
 
     self.Header:SetFont("xpgui_tiny2")
-	self.Header.DoClick = function() self:DoClick() end
-	self.Header.DoRightClick = function() self:DoRightClick() end
+
+	self.Header.DoClick = function() 
+		self:DoClick() 
+	end
+
+	self.Header.DoRightClick = function() 
+		self:DoRightClick() 
+	end
 
 	self.DraggerBar = vgui.Create("DListView_DraggerBar", self)
 
@@ -88,7 +94,7 @@ end
 
 function PANEL:DoClick()
 	self:GetParent():SortByColumn(self:GetColumnID(), self:GetDescending())
-	self:SetDescending(!self:GetDescending())
+	self:SetDescending(not self:GetDescending())
 end
 
 function PANEL:DoRightClick()
@@ -134,9 +140,9 @@ end
 
 derma.DefineControl("XPListView_Column", "Sortable XPListView Column", PANEL, "Panel")
 
---[[---------------------------------------------------------
-	DListView_ColumnPlain
------------------------------------------------------------]]
+--[[
+	Column Plain
+]]
 
 local PANEL = {}
 

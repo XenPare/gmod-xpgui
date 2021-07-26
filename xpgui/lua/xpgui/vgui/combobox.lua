@@ -25,7 +25,6 @@ function PANEL:Init()
 
 	self.DropButton.Paint = function(panel, w, h)
 		CT = SysTime()
-
 		if self:IsMenuOpen() then
 			if self.OpenAnimStartTime > 0 and CT > self.OpenAnimStartTime + 0.2 then
 				self.OpenAnimStartTime = -1
@@ -37,11 +36,11 @@ function PANEL:Init()
 
 			self.OpenBarColor = LerpColor(2.5 * FrameTime(), self.OpenBarColor, self:GetSelectedID() and XPGUI.ComboBoxOpenBarChosenColor or XPGUI.ComboBoxOpenBarOpenedColor)
 		else
-			if self.OpenAnimStartTime < 0 and !self:GetSelectedID() then
+			if self.OpenAnimStartTime < 0 and not self:GetSelectedID() then
 				self.OpenAnimStartTime = CT
 			end
 
-			if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 and !self:GetSelectedID() then
+			if self.OpenAnimStartTime > 0 and CT < self.OpenAnimStartTime + 0.2 and not self:GetSelectedID() then
 				self.OpenBarScale = 6 - 6 / 0.2 * (CT - self.OpenAnimStartTime)
 			end
 
@@ -105,7 +104,7 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:OpenMenu(pControlOpener)
-	if pControlOpener && pControlOpener == self.TextEntry then
+	if pControlOpener and pControlOpener == self.TextEntry then
 		return
 	end
 
@@ -113,7 +112,7 @@ function PANEL:OpenMenu(pControlOpener)
 		return 
 	end
 
-	if (IsValid(self.Menu)) then
+	if IsValid(self.Menu) then
 		self.Menu:Remove()
 		self.Menu = nil
 	end
@@ -124,7 +123,7 @@ function PANEL:OpenMenu(pControlOpener)
 		local sorted = {}
 		for k, v in pairs(self.Choices) do
 			local val = tostring(v)
-			if (string.len(val) > 1 && not tonumber(val) && val:StartWith("#")) then 
+			if (string.len(val) > 1 and not tonumber(val) && val:StartWith("#")) then 
 				val = language.GetPhrase(val:sub(2)) 
 			end
 
@@ -139,7 +138,6 @@ function PANEL:OpenMenu(pControlOpener)
 			local option = self.Menu:AddOption(v.data, function() 
 				self:ChooseOption(v.data, v.id) 
 			end)
-
 			if self.ChoiceIcons[v.id] then
 				option:SetIcon(self.ChoiceIcons[v.id])
 			end
@@ -149,7 +147,6 @@ function PANEL:OpenMenu(pControlOpener)
 			local option = self.Menu:AddOption(v, function() 
 				self:ChooseOption(v, k) 
 			end)
-
 			if self.ChoiceIcons[k] then
 				option:SetIcon(self.ChoiceIcons[k])
 			end

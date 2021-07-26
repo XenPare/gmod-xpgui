@@ -20,7 +20,6 @@ function PANEL:Init()
 end
 
 function PANEL:SetEnabled(b)
-
 	if not b then
 		self.Offset = 0
 		self:SetScroll(0)
@@ -62,7 +61,7 @@ function PANEL:SetUp(_barsize_, _canvassize_)
 end
 
 function PANEL:OnMouseWheeled(dlta)
-	if (!self:IsVisible()) then 
+	if not self:IsVisible() then 
 		return false 
 	end
 
@@ -87,7 +86,6 @@ function PANEL:AddScroll(dlta)
 
 	dlta = dlta * 25
 	self:SetScroll(self:GetScroll() + dlta)
-
 	return OldScroll ~= self:GetScroll()
 end
 
@@ -117,7 +115,7 @@ function PANEL:AnimateTo(scrll, length, delay, ease)
 	anim.StartPos = self.Scroll
 	anim.TargetPos = scrll
 	anim.Think = function(anim, pnl, fraction)
-		pnl:SetScroll(Lerp( fraction, anim.StartPos, anim.TargetPos))
+		pnl:SetScroll(Lerp(fraction, anim.StartPos, anim.TargetPos))
 	end
 end
 
@@ -173,7 +171,6 @@ function PANEL:OnCursorMoved(x, y)
 	self.NextScroll = y * self.CanvasSize
 
 	self:SetScroll(y * self.CanvasSize)
-
 end
 
 function PANEL:Grip()

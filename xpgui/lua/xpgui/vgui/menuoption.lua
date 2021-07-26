@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_pMenu", "Menu")
@@ -36,11 +35,10 @@ function PANEL:AddSubMenu()
 end
 
 function PANEL:OnCursorEntered()
-	if (IsValid(self.ParentMenu)) then
+	if IsValid(self.ParentMenu) then
 		self.ParentMenu:OpenSubMenu(self, self.SubMenu)
 		return
 	end
-
 	self:GetParent():OpenSubMenu(self, self.SubMenu)
 end
 
@@ -77,8 +75,7 @@ end
 
 function PANEL:OnMouseReleased(mousecode)
 	DButton.OnMouseReleased(self, mousecode)
-
-	if self.m_MenuClicking && mousecode == MOUSE_LEFT then
+	if self.m_MenuClicking and mousecode == MOUSE_LEFT then
 		self.m_MenuClicking = false
 		CloseDermaMenus()
 	end
@@ -94,14 +91,13 @@ function PANEL:DoClickInternal()
 	if self:GetIsCheckable() then
 		self:ToggleCheck()
 	end
-
 	if self.m_pMenu then
 		self.m_pMenu:OptionSelectedInternal(self)
 	end
 end
 
 function PANEL:ToggleCheck()
-	self:SetChecked(!self:GetChecked())
+	self:SetChecked(not self:GetChecked())
 	self:OnChecked(self:GetChecked())
 end
 
@@ -114,7 +110,6 @@ function PANEL:PerformLayout()
 	self:SetWide(self:GetWide() + 30)
 
 	local w = math.max(self:GetParent():GetWide(), self:GetWide())
-
 	self:SetSize(w, 22)
 
 	if IsValid(self.SubMenuArrow) then

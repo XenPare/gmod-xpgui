@@ -112,7 +112,7 @@ function PANEL:FixColumnsLayout()
 	end
 
 	local AllWidth = 0
-	for k, Column in pairs(self.Columns) do
+	for _, Column in pairs(self.Columns) do
 		AllWidth = AllWidth + Column:GetWide()
 	end
 
@@ -128,7 +128,7 @@ function PANEL:FixColumnsLayout()
 	local TotalMaxWidth = 0
 	while (Remainder ~= 0) do
 		local PerPanel = math.floor(Remainder / NumColumns)
-		for k, Column in pairs(self.Columns) do
+		for _, Column in pairs(self.Columns) do
 			Remainder = math.Approach(Remainder, 0, PerPanel)
 
 			local TargetWidth = Column:GetWide() + PerPanel
@@ -149,12 +149,12 @@ function PANEL:FixColumnsLayout()
 	end
 
 	local x = 0
-	for k, Column in pairs(self.Columns) do
+	for _, Column in pairs(self.Columns) do
 		Column.x = x
 		x = x + Column:GetWide()
 
 		Column:SetTall(self:GetHeaderHeight())
-		Column:SetVisible(!self:GetHideHeaders())
+		Column:SetVisible(not self:GetHideHeaders())
 	end
 end
 
@@ -175,7 +175,7 @@ function PANEL:PerformLayout()
 		end
 	end
 
-	if (self.m_bHideHeaders) then
+	if self.m_bHideHeaders then
 		self.pnlCanvas:SetPos(0, YPos)
 	else
 		self.pnlCanvas:SetPos(0, YPos)
@@ -202,13 +202,13 @@ end
 function PANEL:OnRequestResize(SizingColumn, iSize)
 	local Passed = false
 	local RightColumn = nil
-	for k, Column in ipairs(self.Columns) do
-		if (Passed) then
+	for _, Column in ipairs(self.Columns) do
+		if Passed then
 			RightColumn = Column
 			break
 		end
 
-		if (SizingColumn == Column) then 
+		if SizingColumn == Column then 
 			Passed = true 
 		end
 	end
@@ -228,7 +228,7 @@ function PANEL:DataLayout()
 	local y, h = 0, self.m_iDataHeight
 	for k, Line in ipairs(self.Sorted) do
 		Line:SetPos(1, y)
-		Line:SetSize(self.pnlCanvas:GetWide()-2, h)
+		Line:SetSize(self.pnlCanvas:GetWide() - 2, h)
 		Line:DataLayout(self)
 
 		Line:SetAltLine(k % 2 == 1)
@@ -266,14 +266,14 @@ function PANEL:AddLine(...)
 end
 
 function PANEL:OnMouseWheeled(dlta)
-	if (!IsValid(self.VBar)) then 
+	if not IsValid(self.VBar) then 
 		return 
 	end
 	return self.VBar:OnMouseWheeled(dlta)
 end
 
 function PANEL:ClearSelection(dlta)
-	for k, Line in pairs(self.Lines) do
+	for _, Line in pairs(self.Lines) do
 		Line:SetSelected(false)
 	end
 end
@@ -300,15 +300,15 @@ end
 
 function PANEL:OnClickLine(Line, bClear)
 	local bMultiSelect = self:GetMultiSelect()
-	if not bMultiSelect && not bClear then 
+	if not bMultiSelect and not bClear then 
 		return 
 	end
 
-	if (bMultiSelect && input.IsKeyDown(KEY_LCONTROL)) then
+	if bMultiSelect and input.IsKeyDown(KEY_LCONTROL) then
 		bClear = false
 	end
 
-	if (bMultiSelect && input.IsKeyDown(KEY_LSHIFT)) then
+	if bMultiSelect and input.IsKeyDown(KEY_LSHIFT) then
 		local Selected = self:GetSortedID(self:GetSelectedLine())
 		if Selected then
 			local LineID = self:GetSortedID(Line:GetID())
@@ -318,7 +318,7 @@ function PANEL:OnClickLine(Line, bClear)
 
 			for id = First, Last do
 				local line = self.Sorted[id]
-				if (!line:IsLineSelected()) then 
+				if not line:IsLineSelected() then 
 					self:OnRowSelected(line:GetID(), line) 
 				end
 				line:SetSelected(true)
@@ -337,7 +337,7 @@ function PANEL:OnClickLine(Line, bClear)
 		end
 	end
 
-	if Line:IsSelected() && Line.m_fClickTime && (!bMultiSelect || bClear) then
+	if Line:IsSelected() and Line.m_fClickTime and (not bMultiSelect or bClear) then
 		local fTimeDistance = SysTime() - Line.m_fClickTime
 		if fTimeDistance < 0.3 then
 			self:DoDoubleClick(Line:GetID(), Line)
@@ -345,7 +345,7 @@ function PANEL:OnClickLine(Line, bClear)
 		end
 	end
 
-	if not bMultiSelect || bClear then
+	if not bMultiSelect or bClear then
 		self:ClearSelection()
 	end
 
@@ -371,28 +371,28 @@ function PANEL:SortByColumns(c1, d1, c2, d2, c3, d3, c4, d4)
 			return false
 		end
 
-		if c1 && a:GetColumnText(c1) ~= b:GetColumnText(c1) then
+		if c1 and a:GetColumnText(c1) ~= b:GetColumnText(c1) then
 			if d1 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c1) < b:GetColumnText(c1)
 		end
 
-		if c2 && a:GetColumnText(c2) ~= b:GetColumnText(c2) then
+		if c2 and a:GetColumnText(c2) ~= b:GetColumnText(c2) then
 			if d2 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c2) < b:GetColumnText(c2)
 		end
 
-		if c3 && a:GetColumnText(c3) ~= b:GetColumnText(c3) then
+		if c3 and a:GetColumnText(c3) ~= b:GetColumnText(c3) then
 			if d3 then 
 				a, b = b, a 
 			end
 			return a:GetColumnText(c3) < b:GetColumnText(c3)
 		end
 
-		if c4 && a:GetColumnText(c4) ~= b:GetColumnText(c4) then
+		if c4 and a:GetColumnText(c4) ~= b:GetColumnText(c4) then
 			if d4 then 
 				a, b = b, a 
 			end
@@ -414,8 +414,8 @@ function PANEL:SortByColumn(ColumnID, Desc)
 			a, b = b, a
 		end
 
-		local aval = a:GetSortValue(ColumnID) || a:GetColumnText(ColumnID)
-		local bval = b:GetSortValue(ColumnID) || b:GetColumnText(ColumnID)
+		local aval = a:GetSortValue(ColumnID) or a:GetColumnText(ColumnID)
+		local bval = b:GetSortValue(ColumnID) or b:GetColumnText(ColumnID)
 
 		return aval < bval
 	end)

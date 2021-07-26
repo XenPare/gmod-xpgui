@@ -12,7 +12,10 @@ function PANEL:Init()
 	self.pnlCanvas = vgui.Create("DDragBase", self)
 	self.pnlCanvas:SetDropPos("6")
 	self.pnlCanvas:SetUseLiveDrag(false)
-	self.pnlCanvas.OnModified = function() self:OnDragModified() end
+
+	self.pnlCanvas.OnModified = function() 
+		self:OnDragModified() 
+	end
 
 	self.pnlCanvas.UpdateDropTarget = function(Canvas, drop, pnl)
 		if not self:GetShowDropTargets() then 
@@ -30,7 +33,7 @@ function PANEL:Init()
 				local closest, id = self.pnlCanvas:GetClosestChild(x, Canvas:GetTall() / 2), 0
 
 				for k, v in pairs(self.Panels) do
-					if (v == closest) then 
+					if v == closest then 
 						id = k 
 						break 
 					end
@@ -40,7 +43,6 @@ function PANEL:Init()
 				table.insert(self.Panels, id, child)
 
 				self:InvalidateLayout()
-
 				return child
 			end
 		end
@@ -111,12 +113,12 @@ function PANEL:Think()
 	local FrameRate = VGUIFrameTime() - self.FrameTime
 	self.FrameTime = VGUIFrameTime()
 
-	if (self.btnRight:IsDown()) then
+	if self.btnRight:IsDown() then
 		self.OffsetX = self.OffsetX + (500 * FrameRate)
 		self:InvalidateLayout(true)
 	end
 
-	if (self.btnLeft:IsDown()) then
+	if self.btnLeft:IsDown() then
 		self.OffsetX = self.OffsetX - (500 * FrameRate)
 		self:InvalidateLayout(true)
 	end
@@ -138,7 +140,7 @@ function PANEL:PerformLayout()
 	self.pnlCanvas:SetTall(h - 24)
 
 	local x = 0
-	for k, v in pairs(self.Panels) do
+	for _, v in pairs(self.Panels) do
 		if not IsValid(v) or not v:IsVisible() then 
 			continue 
 		end
@@ -155,7 +157,7 @@ function PANEL:PerformLayout()
 
 	self.pnlCanvas:SetWide(x + self.m_iOverlap)
 
-	if (w < self.pnlCanvas:GetWide()) then
+	if w < self.pnlCanvas:GetWide() then
 		self.OffsetX = math.Clamp(self.OffsetX, 0, self.pnlCanvas:GetWide() - self:GetWide())
 	else
 		self.OffsetX = 0

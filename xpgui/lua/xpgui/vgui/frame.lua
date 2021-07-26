@@ -72,7 +72,7 @@ function PANEL:Paint(w, h)
 		Derma_DrawBackgroundBlur(self, self.startTime)
 		draw.RoundedBox(6, 0, 0, w, h, Color(0, 0, 0, 200))
 	else
-		if !self.FirstInit then -- We need to pre-cache shape for better performance
+		if not self.FirstInit then -- We need to pre-cache shape for better performance
 			self.FirstInit = true
 			self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
 		end

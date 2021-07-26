@@ -57,7 +57,7 @@ function PANEL:Rebuild()
 	self:GetCanvas():SizeToChildren(false, true)
 
 	-- Although this behaviour isn't exactly implied, center vertically too
-	if self.m_bNoSizing && self:GetCanvas():GetTall() < self:GetTall() then
+	if self.m_bNoSizing and self:GetCanvas():GetTall() < self:GetTall() then
 		self:GetCanvas():SetPos(0, (self:GetTall() - self:GetCanvas():GetTall()) * 0.5)
 	end
 end

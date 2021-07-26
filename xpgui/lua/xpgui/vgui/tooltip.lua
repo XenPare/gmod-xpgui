@@ -75,7 +75,7 @@ end
 function PANEL:Paint(w, h)
 	self:PositionTooltip()
 	
-	if !self.FirstInit then -- We need to pre-cache shape for better performance
+	if not self.FirstInit then -- We need to pre-cache shape for better performance
 		self.FirstInit = true
 		self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
 	end
@@ -107,7 +107,7 @@ function PANEL:OpenForPanel(panel)
 end
 
 function PANEL:Close()
-	if not self.DeleteContentsOnClose && IsValid(self.Contents) then
+	if not self.DeleteContentsOnClose and IsValid(self.Contents) then
 		self.Contents:SetVisible(false)
 		self.Contents:SetParent(nil)
 	end
