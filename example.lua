@@ -1,64 +1,129 @@
 local function example()
-	local menu = vgui.Create("XPFrame")
-	menu:SetTitle("Initial way of closing is here !")
+	local frame = vgui.Create("XPFrame")
+	frame:SetTitle("Example Frame")
 
-	--menu:SetNoRounded() -- that makes frame full screen without rounded shape
-	--menu:Dock(FILL)
+	-- Remove background blur (arg is optional)
+	-- menu:SetBackgroundBlur(false)
 
-	local close = menu:SetBottomButton("Close", FILL, function()
-		menu:Remove()
+	-- Remove frame blur (arg is optional)
+	-- menu:SetFrameBlur(false)
+
+	-- Remove rounded frame shape (arg is optional)
+	-- menu:SetNoRounded(true)
+
+	--[[
+		Frame Bottom Buttons
+	]]
+
+	local bottom_button1 = frame:SetBottomButton("Left", LEFT, function()
+		frame:Remove()
 	end)
 
-	close:SetToolTip("Click me to close the frame !")
+	local bottom_button2 = frame:SetBottomButton("Right", RIGHT, function()
+		frame:Remove()
+	end)
 
-	local entry = vgui.Create("XPTextEntry", menu)
-	entry:Dock(TOP)
-	entry:DockMargin(4, 4, 4, 4)
-	entry:SetTall(32)
-	entry:SetText("hi this is text entry type what you want")
+	local bottom_button3 = frame:SetBottomButton("Fill", FILL, function()
+		frame:Remove()
+	end)
 
-	local list = vgui.Create("XPListView", menu)
-	list:Dock(LEFT)
-	list:SetWide(menu:GetWide() / 3)
+	--[[
+		Left Panel
+	]]
+
+	local left_panel = vgui.Create("XPScrollPanel", frame)
+	left_panel:Dock(LEFT)
+	left_panel:DockMargin(6, 6, 6, 6)
+	left_panel:SetWide(frame:GetWide() / 2)
+
+	--[[
+		Horizontal Scroller
+	]]
+
+	local horizontal_scroll = vgui.Create("XPHorizontalScroller", left_panel)
+	horizontal_scroll:Dock(TOP)
+	horizontal_scroll:SetTall(frame:GetTall() / 2 - 8)
+	horizontal_scroll:SetOverlap(-3)
+
+	for i = 1, 12 do
+		local button = vgui.Create("XPButton", horizontal_scroll)
+		button:SetText("Button #" .. i)
+		button:SetWide(horizontal_scroll:GetTall())
+
+		button.DoClick = function()
+			local menu = vgui.Create("XPMenu", parent)
+
+			for i = 1, 3 do
+				menu:AddOption("Menu Button #" .. i)
+			end
+
+			menu:Open()
+		end
+
+		horizontal_scroll:AddPanel(button)
+	end
+
+	for i = 1, 12 do
+		local button = vgui.Create("XPButton", left_panel)
+		button:Dock(TOP)
+		button:SetText("Button #" .. i)
+		button:SetToolTip("Clicking does really nothing")
+	end
+
+	--[[
+		Right Panel
+	]]
+
+	local right_panel = vgui.Create("XPScrollPanel", frame)
+	right_panel:Dock(RIGHT)
+	right_panel:DockMargin(6, 6, 6, 6)
+	right_panel:SetWide(frame:GetWide() / 2 - 16)
+
+	--[[
+		ComboBox
+	]]
+
+	local combobox = vgui.Create("XPComboBox", right_panel)
+	combobox:Dock(TOP)
+	combobox:DockMargin(4, 4, 4, 16)
+	combobox:SetValue("Choose a number")
+
+	for i = 1, 9 do
+		combobox:AddChoice(i)
+	end
+
+	--[[
+		List
+	]]
+
+	local list = vgui.Create("XPListView", right_panel)
+	list:Dock(TOP)
+	list:SetTall(frame:GetTall() / 2)
 	list:DockMargin(4, 4, 4, 4)
 
 	list:AddColumn("Number")
-	list:AddColumn("Sum with previous")
+	list:AddColumn("Previous + Current")
 
-	for i = 1, 64 do
+	for i = 1, 32 do
 		list:AddLine(i, i + (i - 1))
 	end
 
-	list.OnRowSelected = function(panel, rowIndex, row)
-		local menu = vgui.Create("XPMenu")
-		menu:SetPos(input.GetCursorPos())
+	--[[
+		Text Entry
+	]]
 
-		menu:AddOption("Copy index", function()
-			SetClipboardText(row:GetValue(1))
-		end)
+	local entry = vgui.Create("XPTextEntry", right_panel)
+	entry:Dock(TOP)
+	entry:DockMargin(4, 4, 4, 4)
+	entry:SetTall(32)
+	entry:SetText("Text Entry")
 
-		menu:AddOption("Copy sum", function()
-			SetClipboardText(row:GetValue(2))
-		end)
+	--[[
+		Checkbox
+	]]
 
-		menu:Open()
-	end
-
-	local players = vgui.Create("XPComboBox", menu)
-	players:Dock(TOP)
-	players:DockMargin(4, 4, 4, 16)
-	players:SetValue("Choose a player")
-
-	players:AddChoice("Choose a player")
-	for _, pl in pairs(player.GetAll()) do
-		players:AddChoice(pl:Name())
-	end
-
-	local scroll = vgui.Create("XPScrollPanel", menu)
-	scroll:Dock(FILL)
-
-	for i = 1, 14 do
-		local pnl = vgui.Create("EditablePanel", scroll)
+	for i = 1, 6 do
+		local pnl = vgui.Create("EditablePanel", right_panel)
 		pnl:Dock(TOP)
 		pnl:SetTall(24)
 		pnl:DockMargin(4, 4, 4, 4)
@@ -71,8 +136,8 @@ local function example()
 		local txt = vgui.Create("DLabel", pnl)
 		txt:SetFont("xpgui_medium")
 		txt:SetPos(28, 0)
-		txt:SetWide(menu:GetWide() / 2)
-		txt:SetText("this is checkbox #" .. i)
+		txt:SetWide(frame:GetWide() / 2)
+		txt:SetText("Simple checkbox")
 	end
 end
 concommand.Add("xpgui_example", example)
