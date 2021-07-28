@@ -12,6 +12,10 @@ XPGUI.ClosePressColor = Color(208, 52, 77, 155)
 XPGUI.CloseColor = Color(123, 123, 123, 160)
 XPGUI.HeaderLineColor = Color(200, 200, 200, 120)
 
+-- Button
+
+XPGUI.ButtonColor = Color(245, 245, 245, 25)
+
 -- CheckBox
 
 XPGUI.CheckBoxCheckColor = Color(0, 255, 0)

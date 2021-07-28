@@ -14,8 +14,8 @@ function PANEL:Init()
 	self:SetDoubleClickingEnabled(false)
 	self:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-	self.Color = XPGUI.BGColor
-	self.Color = Color(255 - self.Color.r, 255 - self.Color.g, 255 - self.Color.b, 25)
+	self.ColorA = XPGUI.ButtonColor.a
+	self.Color = Color(XPGUI.ButtonColor.r, XPGUI.ButtonColor.g, XPGUI.ButtonColor.b, XPGUI.ButtonColor.a)
 end
 
 function PANEL:OnDepressed()
@@ -32,13 +32,13 @@ end
 
 function PANEL:Paint(w, h)
 	if self:IsHovered() then
-		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 35)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, self.ColorA + 15)
 	else
-		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 25)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, self.ColorA)
 	end
 
 	if self:IsDown() then
-		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 75)
+		self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, self.ColorA + 25)
 	end
 
 	draw.RoundedBox(6, 0, 0, w, h, self.Color)

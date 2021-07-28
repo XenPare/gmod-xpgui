@@ -49,13 +49,13 @@ end
 local pos_x, pos_y
 function PANEL:Paint(w, h)
     if self:IsHovered() then
-        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 35)
+        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, 35)
     else
-        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 25)
+        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, 25)
     end
 
     if self:IsDown() then
-        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a , 75)
+        self.Color.a = Lerp(7.5 * FrameTime(), self.Color.a, 75)
 	end
 
 	pos_x, pos_y = self:GetPos()

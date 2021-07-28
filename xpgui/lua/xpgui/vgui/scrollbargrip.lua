@@ -2,6 +2,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self.BarScale = 6
+	self.ColorA = XPGUI.ScrollBarGripColor.a
 	self.Color = Color(XPGUI.ScrollBarGripColor.r, XPGUI.ScrollBarGripColor.g, XPGUI.ScrollBarGripColor.b, XPGUI.ScrollBarGripColor.a)
 end
 
@@ -19,7 +20,7 @@ function PANEL:Think()
 	if self:GetParent().Dragging then
 		self.Color.a = Lerp(10 * FrameTime(), self.Color.a, 255)
 	else
-		self.Color.a = Lerp(10 * FrameTime(), self.Color.a, XPGUI.ScrollBarGripColor.a)
+		self.Color.a = Lerp(10 * FrameTime(), self.Color.a, self.ColorA)
 	end
 end
 
