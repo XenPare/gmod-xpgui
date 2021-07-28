@@ -119,7 +119,7 @@ function PANEL:OpenMenu(pControlOpener)
 
 	self.Menu = vgui.Create("XPMenu", self)
 
-	if (self:GetSortItems()) then
+	if self:GetSortItems() then
 		local sorted = {}
 		for k, v in pairs(self.Choices) do
 			local val = tostring(v)

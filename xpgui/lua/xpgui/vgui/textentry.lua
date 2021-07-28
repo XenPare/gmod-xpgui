@@ -8,7 +8,7 @@ function PANEL:Init()
 	self:SetCursorColor(XPGUI.TextEntryCursorColor)
 	self:SetHighlightColor(XPGUI.TextEntryHighlightColor)
 
-	self.IndicatorColor = color_white
+	self.IndicatorColor = Color(255, 255, 255)
 
 	self:SetTooltipPanelOverride("XPTooltip")
 	self:SetTooltip(false)
