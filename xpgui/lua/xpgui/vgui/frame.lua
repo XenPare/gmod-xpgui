@@ -70,15 +70,15 @@ function PANEL:Init()
 end
 
 function PANEL:SetNoRounded(bool)
-	self.Rounded = bool and 0 or 6
+	self.Rounded = (bool == nil and true or bool) and 0 or 6
 end
 
 function PANEL:SetBackgroundBlur(bool)
-	self.BackgroundBlur = bool
+	self.BackgroundBlur = bool == nil and true or bool
 end
 
 function PANEL:SetFrameBlur(bool)
-	self.FrameBlur = bool
+	self.FrameBlur = bool == nil and true or bool
 end
 
 function PANEL:Paint(w, h)
