@@ -52,7 +52,7 @@ function PANEL:AddOption(strText, funcFunction)
 	pnl:SetFont("xpgui_medium")
 	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-	if (funcFunction) then
+	if funcFunction then
 		pnl.DoClick = funcFunction
 	end
 
@@ -75,7 +75,7 @@ function PANEL:AddCVar(strText, convar, on, off, funcFunction)
 	pnl:SetFont("xpgui_medium")
 	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-	if (funcFunction) then
+	if funcFunction then
 		pnl.DoClick = funcFunction
 	end
 
@@ -110,7 +110,7 @@ function PANEL:AddSubMenu(strText, funcFunction)
 	pnl:SetFont("xpgui_medium")
 	pnl:SetExpensiveShadow(1, ColorAlpha(color_black, 140))
 
-	if (funcFunction) then
+	if funcFunction then
 		pnl.DoClick = funcFunction
 	end
 
@@ -131,7 +131,6 @@ end
 
 function PANEL:OpenSubMenu(item, menu)
 	local openmenu = self:GetOpenSubMenu()
-
 	if IsValid(openmenu) and openmenu:IsVisible() then
 		if menu and openmenu == menu then
 			return

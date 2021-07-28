@@ -1,3 +1,5 @@
+local gradtex = surface.GetTextureID("gui/gradient_down")
+
 local PANEL = {}
 
 function PANEL:Init()
@@ -14,7 +16,9 @@ function PANEL:Init()
 	self:SetAlpha(0)
 	self:AlphaTo(255, 0.4, 0)
 
-	self.Rounded = true
+	self.Rounded = 6
+	self.FrameBlur = true
+	self.BackgroundBlur = false
 
 	self.TopDock = vgui.Create("DButton", self)
 	self.TopDock:Dock(TOP)
@@ -65,33 +69,44 @@ function PANEL:Init()
 	end
 end
 
-local gradtex = surface.GetTextureID("gui/gradient_down")
+function PANEL:SetNoRounded(bool)
+	self.Rounded = bool and 0 or 6
+end
+
+function PANEL:SetBackgroundBlur(bool)
+	self.BackgroundBlur = bool
+end
+
+function PANEL:SetFrameBlur(bool)
+	self.FrameBlur = bool
+end
 
 function PANEL:Paint(w, h)
-	if self.BGBlur then
+	if self.BackgroundBlur then
 		Derma_DrawBackgroundBlur(self, self.startTime)
-		draw.RoundedBox(6, 0, 0, w, h, Color(0, 0, 0, 200))
-	else
-		if not self.FirstInit then -- We need to pre-cache shape for better performance
-			self.FirstInit = true
-			self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), 6, 16)
-		end
-		
-		EZMASK.DrawWithMask(function() 
-			surface.SetDrawColor(color_white)
-			surface.DrawPoly(self.PolyMask)
-		end, function() 
-			surface.DrawPanelBlur(self, 6)
-			draw.RoundedBox(6, 0, 0, w, h, Color(0, 0, 0, 200))
-
-			surface.SetDrawColor(XPGUI.HeaderLineColor)
-			surface.DrawLine(8, self.TopDock:GetTall() - 1, w - 8, self.TopDock:GetTall() - 1)
-			surface.DrawLine(8, self.TopDock:GetTall(), w - 8, self.TopDock:GetTall())
-			surface.SetTexture(gradtex)
-			surface.SetDrawColor(ColorAlpha(self.TopDockColor, XPGUI.CloseHoverColor.a * math.abs(self.TopDock.SlideAnim:GetValue() + self.TopDock:GetTall()) / self.TopDock:GetTall()))
-			surface.DrawTexturedRect(0, self.TopDock.SlideAnim:GetValue(), w, self.TopDock:GetTall())
-		end)
 	end
+
+	if not self.FirstInit then -- We need to pre-cache shape for better performance
+		self.FirstInit = true
+		self.PolyMask = surface.PrecacheRoundedRect(0, 0, self:GetWide(), self:GetTall(), self.Rounded, 16)
+	end
+	
+	EZMASK.DrawWithMask(function() 
+		surface.SetDrawColor(color_white)
+		surface.DrawPoly(self.PolyMask)
+	end, function() 
+		if self.FrameBlur then
+			surface.DrawPanelBlur(self, 6)
+		end
+		draw.RoundedBox(self.Rounded, 0, 0, w, h, XPGUI.BGColor)
+
+		surface.SetDrawColor(XPGUI.HeaderLineColor)
+		surface.DrawLine(8, self.TopDock:GetTall() - 1, w - 8, self.TopDock:GetTall() - 1)
+		surface.DrawLine(8, self.TopDock:GetTall(), w - 8, self.TopDock:GetTall())
+		surface.SetTexture(gradtex)
+		surface.SetDrawColor(ColorAlpha(self.TopDockColor, XPGUI.CloseHoverColor.a * math.abs(self.TopDock.SlideAnim:GetValue() + self.TopDock:GetTall()) / self.TopDock:GetTall()))
+		surface.DrawTexturedRect(0, self.TopDock.SlideAnim:GetValue(), w, self.TopDock:GetTall())
+	end)
 end
 
 function PANEL:SetTitle(text)
@@ -137,7 +152,7 @@ function PANEL:OnClose()
 end
 
 function PANEL:Close()
-	self:AlphaTo(0, 0.4, 0, function(_, pan) 
+	self:AlphaTo(0, 0.3, 0, function(_, pan) 
 		pan:Remove() 
 	end)
 	self:OnClose()
