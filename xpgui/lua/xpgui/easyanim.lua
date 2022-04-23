@@ -40,6 +40,8 @@ function animObject:AnimTo(val)
  
 		self.Status = true
 	else
+		self.Value = self.NewValue
+		self.Pos = 0
 		self.Status = false
 	end
 
