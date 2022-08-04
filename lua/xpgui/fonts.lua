@@ -1,0 +1,8 @@
+surface.CreateFont("xpgui_eva", {size = 48, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_gigantic", {size = 42, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_huge", {size = 32, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_big", {size = 26, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_medium", {size = 23, weight = 350, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_small", {size = 22, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_tiny", {size = 16, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})
+surface.CreateFont("xpgui_extratiny", {size = 14, weight = 300, antialias = true, extended = true, font = "Roboto Condensed"})

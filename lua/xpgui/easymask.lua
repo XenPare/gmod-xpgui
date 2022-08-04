@@ -19,21 +19,21 @@ local function EnableMasking()
 end
 
 local function SaveMask()
-    render.SetStencilCompareFunction(STENCIL_EQUAL)
-    render.SetStencilFailOperation(STENCIL_KEEP)
+	render.SetStencilCompareFunction(STENCIL_EQUAL)
+	render.SetStencilFailOperation(STENCIL_KEEP)
 end
 
 local function DisableMasking()
-    render.SetStencilEnable(false)
+	render.SetStencilEnable(false)
 end
 
 function EZMASK.DrawWithMask(func_mask, func_todraw)
-    ResetStencils()
-    EnableMasking()
-    func_mask()
-    SaveMask()
-    func_todraw()
-    DisableMasking()
+	ResetStencils()
+	EnableMasking()
+	func_mask()
+	SaveMask()
+	func_todraw()
+	DisableMasking()
 end
 
 EZMASK.ResetStencils = ResetStencils

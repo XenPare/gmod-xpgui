@@ -1,19 +1,19 @@
 local function example()
 	local frame = vgui.Create("XPFrame")
 	frame:SetTitle("Example Frame")
+	-- frame:SetBackgroundBlur(false)
+	-- frame:SetFrameBlur(false)
+	-- frame:SetNoRounded(true)
 
-	-- Remove background blur (arg is optional)
-	-- menu:SetBackgroundBlur(false)
+	local sheet = vgui.Create("XPPropertySheet", frame)
+	sheet:DockMargin(4, 4, 4, 4)
+	sheet:Dock(FILL)
 
-	-- Remove frame blur (arg is optional)
-	-- menu:SetFrameBlur(false)
+	local pan1 = vgui.Create("EditablePanel", sheet)
+	sheet:AddSheet("Preview Tab", pan1)
 
-	-- Remove rounded frame shape (arg is optional)
-	-- menu:SetNoRounded(true)
-
-	--[[
-		Frame Bottom Buttons
-	]]
+	local pan2 = vgui.Create("EditablePanel", sheet)
+	sheet:AddSheet("Empty Tab", pan2)
 
 	local bottom_button1 = frame:SetBottomButton("Left", LEFT, function()
 		frame:Remove()
@@ -31,15 +31,12 @@ local function example()
 		Left Panel
 	]]
 
-	local left_panel = vgui.Create("XPScrollPanel", frame)
+	local left_panel = vgui.Create("XPScrollPanel", pan1)
 	left_panel:Dock(LEFT)
 	left_panel:DockMargin(6, 6, 6, 6)
-	left_panel:SetWide(frame:GetWide() / 2)
+	left_panel:SetWide(frame:GetWide() / 2 - 4)
 
-	--[[
-		Horizontal Scroller
-	]]
-
+	-- Horizontal Scroller
 	local horizontal_scroll = vgui.Create("XPHorizontalScroller", left_panel)
 	horizontal_scroll:Dock(TOP)
 	horizontal_scroll:SetTall(frame:GetTall() / 2 - 8)
@@ -74,15 +71,12 @@ local function example()
 		Right Panel
 	]]
 
-	local right_panel = vgui.Create("XPScrollPanel", frame)
+	local right_panel = vgui.Create("XPScrollPanel", pan1)
 	right_panel:Dock(RIGHT)
 	right_panel:DockMargin(6, 6, 6, 6)
-	right_panel:SetWide(frame:GetWide() / 2 - 16)
+	right_panel:SetWide(frame:GetWide() / 2 - 20)
 
-	--[[
-		ComboBox
-	]]
-
+	-- ComboBox
 	local combobox = vgui.Create("XPComboBox", right_panel)
 	combobox:Dock(TOP)
 	combobox:DockMargin(4, 4, 4, 16)
@@ -92,10 +86,7 @@ local function example()
 		combobox:AddChoice(i)
 	end
 
-	--[[
-		List
-	]]
-
+	-- List
 	local list = vgui.Create("XPListView", right_panel)
 	list:Dock(TOP)
 	list:SetTall(frame:GetTall() / 2)
@@ -108,20 +99,14 @@ local function example()
 		list:AddLine(i, i + (i - 1))
 	end
 
-	--[[
-		Text Entry
-	]]
-
+	-- Text Entry
 	local entry = vgui.Create("XPTextEntry", right_panel)
 	entry:Dock(TOP)
 	entry:DockMargin(4, 4, 4, 4)
 	entry:SetTall(32)
 	entry:SetText("Text Entry")
 
-	--[[
-		Checkbox
-	]]
-
+	-- Checkbox
 	for i = 1, 6 do
 		local pnl = vgui.Create("EditablePanel", right_panel)
 		pnl:Dock(TOP)

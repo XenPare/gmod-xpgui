@@ -1,11 +1,12 @@
 -- https://github.com/alexsnowrun/easyanim
 
 local animObject = {
--- Changeable properties
+	-- Changeable properties
 	Duration = 0,
 	Ease = function(x) return x end,
 	Pos = 0,
--- Internal properties
+
+	-- Internal properties
 	Value = 0,
 	NewValue = 0,
 	StartTime = 0,
@@ -37,7 +38,7 @@ function animObject:AnimTo(val)
 
 	if time <= self.EndTime then
 		self.Value = self.Delta * self.Ease((time - self.StartTime) / self.Duration)
- 
+
 		self.Status = true
 	else
 		self.Value = self.NewValue
@@ -82,7 +83,7 @@ function EASE_OutSine(x)
 end
 
 function EASE_InOutSine(x)
-    return -(cos(pi * x) - 1) / 2
+	return -(cos(pi * x) - 1) / 2
 end
 
 --Cubic
@@ -96,7 +97,7 @@ function EASE_OutCubic(x)
 end
 
 function EASE_InOutCubic(x)
-    return x < 0.5 and 4 * x * x * x or 1 - (-2 * x + 2)^3 / 2
+	return x < 0.5 and 4 * x * x * x or 1 - (-2 * x + 2)^3 / 2
 end
 
 --Quint
@@ -106,11 +107,11 @@ function EASE_InQuint(x)
 end
 
 function EASE_OutQuint(x)
-    return 1 - (1 - x)^5
+	return 1 - (1 - x)^5
 end
 
 function EASE_InOutQuint(x)
-    return x < 0.5 and 16 * x * x * x * x * x or 1 - (-2 * x + 2)^5 / 2
+	return x < 0.5 and 16 * x * x * x * x * x or 1 - (-2 * x + 2)^5 / 2
 end
 
 --Circ
@@ -120,13 +121,13 @@ function EASE_InCirc(x)
 end
 
 function EASE_OutCirc(x)
-    return sqrt(1 - (x - 1)^2)
+	return sqrt(1 - (x - 1)^2)
 end
 
 function EASE_InOutCirc(x)
-    return x < 0.5
-    and (1 - sqrt(1 - (2 * x)^2)) / 2
-    or (sqrt(1 - (-2 * x + 2)^2) + 1) / 2
+	return x < 0.5
+	and (1 - sqrt(1 - (2 * x)^2)) / 2
+	or (sqrt(1 - (-2 * x + 2)^2) + 1) / 2
 end
 
 --Elastic
@@ -135,7 +136,7 @@ function EASE_InElastic(x)
 	return x == 0 and 0 or (x == 1 and 1 or -2^(10 * x - 10) * sin((x * 10 - 10.75) * c4))
 end
 
-function EASE_OutElastic(x)   
+function EASE_OutElastic(x)
 	return x == 0 and 0 or x == 1 and 1 or 2^(-10 * x) * sin((x * 10 - 0.75) * c4) + 1
 end
 
@@ -156,11 +157,11 @@ function EASE_InQuad(x)
 end
 
 function EASE_OutQuad(x)
-    return 1 - (1 - x) * (1 - x)
+	return 1 - (1 - x) * (1 - x)
 end
 
 function EASE_InOutQuad(x)
-    return x < 0.5 and 2 * x * x or 1 - (-2 * x + 2)^2 / 2
+	return x < 0.5 and 2 * x * x or 1 - (-2 * x + 2)^2 / 2
 end
 
 --Quart
@@ -170,11 +171,11 @@ function EASE_InQuart(x)
 end
 
 function EASE_OutQuart(x)
-    return 1 - (1 - x)^4
+	return 1 - (1 - x)^4
 end
 
 function EASE_InOutQuart(x)
-    return x < 0.5 and 8 * x * x * x * x or 1 - (-2 * x + 2)^4 / 2
+	return x < 0.5 and 8 * x * x * x * x or 1 - (-2 * x + 2)^4 / 2
 end
 
 --Expo
@@ -184,16 +185,16 @@ function EASE_InExpo(x)
 end
 
 function EASE_OutExpo(x)
-    return x == 1 and 1 or 1 - 2^(-10 * x)
+	return x == 1 and 1 or 1 - 2^(-10 * x)
 end
 
 function EASE_InOutExpo(x)
-    return x == 0
-    	and 0
-    	or x == 1
-    	and 1
-    	or x < 0.5 and 2^(20 * x - 10) / 2
-    or (2 - 2^(-20 * x + 10)) / 2
+	return x == 0
+		and 0
+		or x == 1
+		and 1
+		or x < 0.5 and 2^(20 * x - 10) / 2
+	or (2 - 2^(-20 * x + 10)) / 2
 end
 
 --Back
@@ -203,11 +204,11 @@ function EASE_InBack(x)
 end
 
 function EASE_OutBack(x)
-    return 1 + c3 * (x - 1)^3 + c1 * (x - 1)^2
+	return 1 + c3 * (x - 1)^3 + c1 * (x - 1)^2
 end
 
-function EASE_InOutBack(x)    
-    return x < 0.5
+function EASE_InOutBack(x)
+	return x < 0.5
 	and ((2 * x)^2 * ((c2 + 1) * 2 * x - c2)) / 2
 	or ((2 * x - 2)^2 * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2
 end
@@ -234,7 +235,7 @@ function EASE_InBounce(x)
 end
 
 function EASE_InOutBounce(x)
-    return x < 0.5
-    and (1 - EASE_OutBounce(1 - 2 * x)) / 2
-    or (1 + EASE_OutBounce(2 * x - 1)) / 2
+	return x < 0.5
+	and (1 - EASE_OutBounce(1 - 2 * x)) / 2
+	or (1 + EASE_OutBounce(2 * x - 1)) / 2
 end
