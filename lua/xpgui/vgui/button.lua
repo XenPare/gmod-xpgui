@@ -44,6 +44,11 @@ function PANEL:Paint(w, h)
 	draw.RoundedBox(6, 0, 0, w, h, self.Color)
 end
 
+function PANEL:SetAccentColor(clr)
+	self.ColorA = 90
+	self.Color = clr
+end
+
 function PANEL:UpdateColours()
 	if self:GetDisabled() then
 		return self:SetTextStyleColor(XPGUI.ButtonDisabledTextColor)
