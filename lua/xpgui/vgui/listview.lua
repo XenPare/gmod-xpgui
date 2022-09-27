@@ -84,17 +84,17 @@ function PANEL:AddColumn(strName, iPosition)
 	return pColumn
 end
 
-function PANEL:RemoveLine(LineID)
-	local Line = self:GetLine(LineID)
-	local SelectedID = self:GetSortedID(LineID)
+function PANEL:RemoveLine(lineID)
+	local line = self:GetLine(lineID)
+	local selectedID = self:GetSortedID(lineID)
 
-	self.Lines[LineID] = nil
-	table.remove(self.Sorted, SelectedID)
+	self.Lines[lineID] = nil
+	table.remove(self.Sorted, selectedID)
 
 	self:SetDirty(true)
 	self:InvalidateLayout()
 
-	Line:Remove()
+	line:Remove()
 end
 
 function PANEL:ColumnWidth(i)
@@ -308,7 +308,7 @@ function PANEL:OnClickLine(line, bClear)
 	if bMultiSelect and input.IsKeyDown(KEY_LSHIFT) then
 		local selected = self:GetSortedID(self:GetSelectedLine())
 		if selected then
-			local lineID = self:GetSortedID(Line:GetID())
+			local lineID = self:GetSortedID(line:GetID())
 
 			local first = math.min(selected, lineID)
 			local last = math.max(selected, lineID)
