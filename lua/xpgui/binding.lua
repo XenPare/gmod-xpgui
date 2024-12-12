@@ -19,7 +19,10 @@ function XPGUI.GetAmount()
 end
 
 function XPGUI.RemoveLast()
-	XPGUI.GetLast():Close()
+	local last = XPGUI.GetLast()
+	if IsValid(last) then
+		last:Close()
+	end
 end
 
 function XPGUI.Add(pnl)
